@@ -1,0 +1,41 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.tom.vivecraftcompat.mixin",
+  "plugin": "com.tom.vivecraftcompat.mixinplugin.VCCMixinPlugin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "vivecraftcompat.mixins.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+	  "compat.firstpersonmod.FPMVRPlayerRendererMixin",
+	  
+	  "compat.create.CreateBigOutlinesMixin",
+	  "compat.create.CreateTrackBlockOutlineMixin",
+	  "compat.create.CreateControlsUtilMixin",
+	  "compat.create.CreateRaycastHelperMixin",
+	  
+	  "compat.toms_storage.TSStorageModClientMixin",
+	  
+	  "compat.jade.JadeRayTracingMixin",
+	  "compat.jade.JadeClientPlatformProxyMixin",
+	  
+	  "compat.journeymap.JMForgeHudOverlayEventsMixin",
+	  "compat.journeymap.JMEffectMixin",
+	  
+	  "compat.theoneprobe.ClientSetupMixin",
+	  "compat.theoneprobe.OverlayRendererMixin",
+	  
+	  "MinecraftMixin",
+	  "VivecraftMovementInputMixin",
+	  "VRRendererMixin",
+	  "GameRendererMixin",
+	  "MCVRMixin",
+	  "VRPlayerMixin",
+	  "ButtonMixin",
+	  "InputSimulatorMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
