@@ -3,7 +3,9 @@
 Improves compatibility between vivecraft and various other mods.
 Currently supported mods:
 - [Create](https://www.curseforge.com/minecraft/mc-mods/create)  
-  Fixed Driving trains and placing rails
+  Fixed Driving trains  
+  Fixed track hitboxes breaking  
+  Fixed hold to set menus not working  
 - [First Person Model](https://www.curseforge.com/minecraft/mc-mods/first-person-model)  
   Render the first person model in the correct place
 - [Jade](https://www.curseforge.com/minecraft/mc-mods/jade)  
@@ -12,6 +14,8 @@ Currently supported mods:
   Register the overlay into Forge's overlay registry.
 - [The One Probe](https://www.curseforge.com/minecraft/mc-mods/the-one-probe)  
   Register the overlay into Forge's overlay registry.
+- [Tom's Simple Storage Mod](https://www.curseforge.com/minecraft/mc-mods/toms-storage)  
+  Fix the Wireless Terminal not working correctly.
 
 ### The overlay system:
 You can create custom overlays in VR for various vanilla and modded HUD elements.  

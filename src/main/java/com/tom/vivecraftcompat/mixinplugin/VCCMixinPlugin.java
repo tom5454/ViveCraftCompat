@@ -6,7 +6,6 @@ import java.util.Set;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
-import org.vivecraft.VRState;
 
 import net.minecraftforge.fml.loading.LoadingModList;
 
@@ -24,7 +23,6 @@ public class VCCMixinPlugin implements IMixinConfigPlugin {
 
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		if(!VRState.isVR)return false;
 		String[] sp = mixinClassName.split("\\.");
 		if(sp.length > 5 && sp[4].equals("compat")) {
 			return LoadingModList.get().getModFileById(sp[5]) != null;

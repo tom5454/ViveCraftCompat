@@ -28,6 +28,7 @@ public class HudOverlayScreen extends Screen {
 	private String name;
 	public boolean outline;
 	public Layer layer;
+	public OverlayEnable enable = OverlayEnable.ALWAYS;
 
 	public HudOverlayScreen(String id) {
 		super(Component.literal(""));
@@ -36,7 +37,7 @@ public class HudOverlayScreen extends Screen {
 
 	@Override
 	public void render(PoseStack poseStack, int pMouseX, int pMouseY, float pPartialTick) {
-		if(this.minecraft.player == null)return;
+		if(this.minecraft.player == null || this.minecraft.gameMode == null || this.minecraft.level == null || !isEnabled())return;
 		int screenWidth = this.minecraft.getWindow().getGuiScaledWidth();
 		int screenHeight = this.minecraft.getWindow().getGuiScaledHeight();
 		overlays.forEach(id -> {
@@ -83,5 +84,9 @@ public class HudOverlayScreen extends Screen {
 
 	public String getId() {
 		return id;
+	}
+
+	public boolean isEnabled() {
+		return enable.test(minecraft);
 	}
 }

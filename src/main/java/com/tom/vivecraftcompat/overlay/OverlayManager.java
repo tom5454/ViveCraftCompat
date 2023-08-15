@@ -6,19 +6,22 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.vivecraft.ClientDataHolder;
-import org.vivecraft.VRTextureTarget;
-import org.vivecraft.api.VRData;
-import org.vivecraft.extensions.GameRendererExtension;
-import org.vivecraft.gameplay.screenhandlers.GuiHandler;
-import org.vivecraft.gameplay.screenhandlers.KeyboardHandler;
-import org.vivecraft.provider.ControllerType;
-import org.vivecraft.provider.MCVR;
-import org.vivecraft.utils.Utils;
-import org.vivecraft.utils.math.Matrix4f;
-import org.vivecraft.utils.math.Quaternion;
-import org.vivecraft.utils.math.Vector3;
+import org.vivecraft.client.VivecraftVRMod;
+import org.vivecraft.client.utils.Utils;
+import org.vivecraft.client_vr.ClientDataHolderVR;
+import org.vivecraft.client_vr.VRData;
+import org.vivecraft.client_vr.VRTextureTarget;
+import org.vivecraft.client_vr.extensions.GameRendererExtension;
+import org.vivecraft.client_vr.gameplay.screenhandlers.GuiHandler;
+import org.vivecraft.client_vr.gameplay.screenhandlers.KeyboardHandler;
+import org.vivecraft.client_vr.provider.ControllerType;
+import org.vivecraft.client_vr.provider.MCVR;
+import org.vivecraft.client_vr.provider.openvr_lwjgl.VRInputAction.KeyListener;
+import org.vivecraft.common.utils.math.Matrix4f;
+import org.vivecraft.common.utils.math.Quaternion;
+import org.vivecraft.common.utils.math.Vector3;
 
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
@@ -32,6 +35,7 @@ import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
+import com.tom.vivecraftcompat.VRMode;
 import com.tom.vivecraftcompat.access.MC;
 import com.tom.vivecraftcompat.events.VRBindingsEvent;
 import com.tom.vivecraftcompat.events.VRUpdateControllersEvent;
@@ -39,7 +43,7 @@ import com.tom.vivecraftcompat.overlay.OverlayLock.LockedPosition;
 
 public class OverlayManager {
 	public static Minecraft minecraft = Minecraft.getInstance();
-	public static ClientDataHolder dh = ClientDataHolder.getInstance();
+	public static ClientDataHolderVR dh = ClientDataHolderVR.getInstance();
 	private static List<Layer> screens = new ArrayList<>();
 	private static boolean overlayRendering;
 
@@ -48,7 +52,7 @@ public class OverlayManager {
 	}
 
 	public static void drawLayers(float partial) {
-		if(screens.isEmpty())return;
+		if(!VRMode.isVR() || screens.isEmpty())return;
 		MC mc = (MC) minecraft;
 		RenderTarget bak = minecraft.getMainRenderTarget();
 		overlayRendering = true;
@@ -65,15 +69,42 @@ public class OverlayManager {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void overlayPre(RenderGuiOverlayEvent.Pre event) {
-		if(overlayRendering)return;
+		if(overlayRendering || !VRMode.isVR())return;
 		ResourceLocation rl = event.getOverlay().id();
 		if(isOverlayDetached(rl)) {
 			event.setCanceled(true);
 		}
 	}
 
+	public static void populateListeners() {
+		registerListener(minecraft.options.keyAttack, 0);
+		registerListener(minecraft.options.keyUse, 1);
+		registerListener(GuiHandler.keyLeftClick, 0);
+		registerListener(GuiHandler.keyRightClick, 1);
+	}
+
+	private static void registerListener(KeyMapping map, int kb) {
+		MCVR.get().getInputAction(map).registerListener(new KeyListener() {
+
+			@Override
+			public boolean onUnpressed(ControllerType var1) {
+				return interact(kb, false);
+			}
+
+			@Override
+			public boolean onPressed(ControllerType var1) {
+				return interact(kb, true);
+			}
+
+			@Override
+			public int getPriority() {
+				return 0;
+			}
+		});
+	}
+
 	public static boolean isOverlayDetached(ResourceLocation rl) {
-		return screens.stream().anyMatch(h -> h.screen instanceof HudOverlayScreen s && s.overlays.contains(rl));
+		return VRMode.isVR() && screens.stream().anyMatch(h -> h.screen instanceof HudOverlayScreen s && s.isEnabled() && s.overlays.contains(rl));
 	}
 
 	public static void addLayer(Layer layer) {
@@ -107,12 +138,17 @@ public class OverlayManager {
 
 		public void reinit() {
 			if(framebuffer != null)framebuffer.destroyBuffers();
-			framebuffer = new VRTextureTarget("HudScreen", minecraft.getWindow().getScreenWidth(), minecraft.getWindow().getScreenHeight(), true, false, -1, false, true, false);
-			screen.init(minecraft, minecraft.getWindow().getGuiScaledWidth(), minecraft.getWindow().getGuiScaledHeight());
+			framebuffer = null;
+			if(VRMode.isVR()) {
+				framebuffer = new VRTextureTarget("HudScreen", GuiHandler.guiWidth, GuiHandler.guiHeight, true, false, -1, false, true, false);
+				int l2 = minecraft.getWindow().getGuiScaledWidth();
+				int j3 = minecraft.getWindow().getGuiScaledHeight();
+				screen.init(minecraft, l2, j3);
+			}
 		}
 
 		public RenderTarget getFramebuffer() {
-			if(framebuffer == null)reinit();
+			if(VRMode.isVR() && framebuffer == null)reinit();
 			return framebuffer;
 		}
 
@@ -178,9 +214,8 @@ public class OverlayManager {
 		public void startMovingLayer(int controller) {
 			preMoveLock = lock;
 			setLock(OverlayLock.FLOAT);
-			ClientDataHolder dataholder = ClientDataHolder.getInstance();
 			startController = controller;
-			startControllerPose = dataholder.vrPlayer.vrdata_room_pre.getController(controller);
+			startControllerPose = dh.vrPlayer.vrdata_room_pre.getController(controller);
 			startDragPosX = (float) pos.x;
 			startDragPosY = (float) pos.y;
 			startDragPosZ = (float) pos.z;
@@ -189,10 +224,8 @@ public class OverlayManager {
 		}
 
 		public void updateMovingLayer() {
-			ClientDataHolder dataholder = ClientDataHolder.getInstance();
-
 			if (startControllerPose != null) {
-				VRData.VRDevicePose vrdata$vrdevicepose = dataholder.vrPlayer.vrdata_room_pre.getController(startController);
+				VRData.VRDevicePose vrdata$vrdevicepose = dh.vrPlayer.vrdata_room_pre.getController(startController);
 				Vec3 vec3 = startControllerPose.getPosition();
 				Vec3 vec31 = vrdata$vrdevicepose.getPosition().subtract(vec3);
 				Matrix4f matrix4f = Matrix4f.multiply(vrdata$vrdevicepose.getMatrix(), startControllerPose.getMatrix().inverted());
@@ -251,6 +284,10 @@ public class OverlayManager {
 		public Matrix4f getRotationRaw() {
 			return rotation;
 		}
+
+		public void setLockDirect(OverlayLock lock) {
+			this.lock = lock;
+		}
 	}
 
 	public static void forEachLayer(Consumer<Layer> renderLayer) {
@@ -259,6 +296,7 @@ public class OverlayManager {
 	}
 
 	public static void renderLayers(Consumer<Layer> renderLayer) {
+		if(!VRMode.isVR())return;
 		forEachLayer(l -> {
 			float gs = GuiHandler.guiScale;
 			GuiHandler.guiScale = gs * l.scale;
@@ -279,7 +317,7 @@ public class OverlayManager {
 	@SubscribeEvent
 	public static void processBindings(VRBindingsEvent event) {
 		for (Layer layer : screens) {
-			if (layer.startControllerPose != null && MCVR.get().keyMenuButton.consumeClick()) {
+			if (layer.startControllerPose != null && VivecraftVRMod.INSTANCE.keyMenuButton.consumeClick()) {
 				layer.stopMovingLayer();
 			}
 		}
@@ -314,6 +352,16 @@ public class OverlayManager {
 			if(found[0])return;
 			if(s.screen instanceof VRInteractableScreen i)
 				found[0] = i.key(key);
+		});
+		return found[0];
+	}
+
+	public static boolean interact(int key, boolean press) {
+		boolean[] found = new boolean[] {false};
+		forEachLayer(s -> {
+			if(found[0])return;
+			if(s.screen instanceof VRInteractableScreen i)
+				found[0] = i.interact(key, press);
 		});
 		return found[0];
 	}

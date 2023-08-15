@@ -2,10 +2,9 @@ package com.tom.vivecraftcompat;
 
 import java.io.File;
 
-import org.vivecraft.ClientDataHolder;
-import org.vivecraft.VRState;
-import org.vivecraft.provider.ControllerType;
-import org.vivecraft.render.RenderPass;
+import org.vivecraft.client_vr.ClientDataHolderVR;
+import org.vivecraft.client_vr.provider.ControllerType;
+import org.vivecraft.client_vr.render.RenderPass;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -33,6 +32,7 @@ import com.tom.vivecraftcompat.overlay.OverlaySettingsGui;
 import dev.tr7zw.firstperson.FirstPersonModelCore;
 
 public class Client {
+	private static final ClientDataHolderVR DATA_HOLDER = ClientDataHolderVR.getInstance();
 	public static ModConfigFile config;
 	private static final Component CAM_BTN = Component.translatable("vivecraft.gui.movethirdpersoncam");
 	private static final Component OVERLAY_BTN = Component.translatable("vivecraftcompat.gui.overlays");
@@ -45,13 +45,12 @@ public class Client {
 		MinecraftForge.EVENT_BUS.register(Client.class);
 
 		config = new ModConfigFile(new File(FMLPaths.CONFIGDIR.get().toFile(), "vivecraftcompat.json"));
-		if (VRState.isVR)
-			OverlayConfig.loadOverlays();
+		OverlayConfig.loadOverlays();
 	}
 
 	@SubscribeEvent
 	public static void initGui(ScreenEvent.Init.Post evt) {
-		if (VRState.isVR && evt.getScreen() instanceof PauseScreen) {
+		if (VRMode.isVR() && evt.getScreen() instanceof PauseScreen) {
 			for (GuiEventListener l : evt.getListenersList()) {
 				if(l instanceof Button b) {
 					if(b.getMessage().equals(CAM_BTN) && b instanceof BTN btn) {
@@ -70,17 +69,24 @@ public class Client {
 	}
 
 	public static void playerRenderPreFPM(RenderPlayerEvent.Pre event) {
-		if(VRState.isVR && FirstPersonModelCore.isRenderingPlayer) {
-			if(ClientDataHolder.getInstance().currentPass == RenderPass.THIRD || ClientDataHolder.getInstance().currentPass == RenderPass.CAMERA) {
+		if(VRMode.isVR() && FirstPersonModelCore.isRenderingPlayer) {
+			if(DATA_HOLDER.currentPass == RenderPass.THIRD || DATA_HOLDER.currentPass == RenderPass.CAMERA) {
 				event.setCanceled(true);
 				return;
 			}
 			FirstPersonModelCore.config.vanillaHands = true;
 
-			float y = event.getEntity().getYHeadRot();
+			float yr = event.getEntity().getYHeadRot();
 			float s = -0.2f;
+			float y = -1.52f;
+			if (event.getEntity().isVisuallySwimming()) {
+				y += 1f;
+				s -= 0.3f;
+			} else if(event.getEntity().isShiftKeyDown()) {
+				y += 0.1f;
+			}
 
-			event.getPoseStack().translate(-Math.sin(Math.toRadians(y)) * s, -1.52, Math.cos(Math.toRadians(y)) * s);
+			event.getPoseStack().translate(-Math.sin(Math.toRadians(yr)) * s, y, Math.cos(Math.toRadians(yr)) * s);
 		}
 	}
 

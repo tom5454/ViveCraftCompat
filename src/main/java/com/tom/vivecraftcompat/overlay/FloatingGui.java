@@ -3,10 +3,10 @@ package com.tom.vivecraftcompat.overlay;
 import java.util.function.Function;
 
 import org.lwjgl.glfw.GLFW;
-import org.vivecraft.ClientDataHolder;
-import org.vivecraft.gameplay.screenhandlers.GuiHandler;
-import org.vivecraft.provider.MCVR;
-import org.vivecraft.utils.math.Matrix4f;
+import org.vivecraft.client.VivecraftVRMod;
+import org.vivecraft.client_vr.ClientDataHolderVR;
+import org.vivecraft.client_vr.gameplay.screenhandlers.GuiHandler;
+import org.vivecraft.common.utils.math.Matrix4f;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -140,29 +140,8 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 
 		//double d0 = (double)Math.min(Math.max((int)this.cursorX1, 0), minecraft.getWindow().getScreenWidth()) * (double)minecraft.getWindow().getGuiScaledWidth() / minecraft.getWindow().getScreenWidth();
 		//double d1 = (double)Math.min(Math.max((int)this.cursorY1, 0), minecraft.getWindow().getScreenWidth()) * (double)minecraft.getWindow().getGuiScaledHeight() / minecraft.getWindow().getScreenHeight();
-		double d2 = (double)Math.min(Math.max((int)this.cursorX2, 0), minecraft.getWindow().getScreenWidth()) * (double)minecraft.getWindow().getGuiScaledWidth() / minecraft.getWindow().getScreenWidth();
-		double d3 = (double)Math.min(Math.max((int)this.cursorY2, 0), minecraft.getWindow().getScreenWidth()) * (double)minecraft.getWindow().getGuiScaledHeight() / minecraft.getWindow().getScreenHeight();
-
-		if (PointedR && (GuiHandler.keyLeftClick.consumeClick() || minecraft.options.keyAttack.consumeClick())) {
-			mouseClicked(((int)d2), ((int)d3), 0);
-			lastPressedClick = true;
-			//activecontroller = ControllerType.RIGHT;//TODO set active controller
-		}
-
-		if (!(GuiHandler.keyLeftClick.isDown() || minecraft.options.keyAttack.isDown()) && lastPressedClick) {
-			mouseReleased(((int)d2), ((int)d3), 0);
-			lastPressedClick = false;
-		}
-
-		if (PointedR && (GuiHandler.keyRightClick.consumeClick() || minecraft.options.keyUse.consumeClick())) {
-			layer.startMovingLayer(0);
-			lastPressedRClick = true;
-		}
-
-		if (!(GuiHandler.keyRightClick.isDown() || minecraft.options.keyUse.isDown()) && lastPressedRClick) {
-			lastPressedRClick = false;
-			layer.stopMovingLayer();
-		}
+		double d2 = (double)(this.cursorX2 * this.width / this.minecraft.getWindow().getGuiScaledWidth()) * (double)this.minecraft.getWindow().getGuiScaledWidth() / this.minecraft.getWindow().getScreenWidth();
+		double d3 = (double)(this.cursorY2 * this.height / this.minecraft.getWindow().getGuiScaledHeight()) * (double)this.minecraft.getWindow().getGuiScaledWidth() / this.minecraft.getWindow().getScreenWidth();
 
 		if (PointedR && GuiHandler.keyScrollUp.consumeClick()) {
 			/*double cx, cy;
@@ -188,7 +167,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 			mouseScrolled(d2, d3, -4);
 		}
 
-		if(PointedR && MCVR.get().keyMenuButton.consumeClick()) {
+		if(PointedR && VivecraftVRMod.INSTANCE.keyMenuButton.consumeClick()) {
 			keyPressed(GLFW.GLFW_KEY_ESCAPE, 0, 0);
 		}
 	}
@@ -238,7 +217,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, Screen.GUI_ICONS_LOCATION);
-		float f = 16.0F * ClientDataHolder.getInstance().vrSettings.menuCrosshairScale;
+		float f = 16.0F * ClientDataHolderVR.getInstance().vrSettings.menuCrosshairScale;
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ZERO, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 		this.drawCentredTexturedModalRect(mouseX, mouseY, f, f, 0, 0, 15, 15);
 		RenderSystem.disableBlend();
@@ -316,5 +295,45 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 	@Override
 	public boolean key(int key) {
 		return keyPressed(key, 0, 0);
+	}
+
+	@Override
+	public void setupCut() {
+		if(!noScissorTest) {
+			int dw = GuiHandler.guiWidth;
+			int dh = GuiHandler.guiHeight;
+			float multiplierX = dw / (float)width;
+			float multiplierY = dh / (float)height;
+			Box box = getContext().cutBox;
+			RenderSystem.enableScissor((int) (box.x * multiplierX), dh - (int) ((box.y + box.h) * multiplierY),
+					(int) (box.w * multiplierX), (int) (box.h * multiplierY));
+		}
+	}
+
+
+	@Override
+	public boolean interact(int key, boolean press) {
+		double d2 = (double)(this.cursorX2 * this.width / this.minecraft.getWindow().getGuiScaledWidth()) * (double)this.minecraft.getWindow().getGuiScaledWidth() / this.minecraft.getWindow().getScreenWidth();
+		double d3 = (double)(this.cursorY2 * this.height / this.minecraft.getWindow().getGuiScaledHeight()) * (double)this.minecraft.getWindow().getGuiScaledWidth() / this.minecraft.getWindow().getScreenWidth();
+		if (key == 0) {
+			if (press && PointedR) {
+				mouseClicked(((int)d2), ((int)d3), 0);
+				lastPressedClick = true;
+				return true;
+			} else if(lastPressedClick) {
+				mouseReleased(((int)d2), ((int)d3), 0);
+				lastPressedClick = false;
+				return true;
+			}
+		} else if (key == 1) {
+			if (press && PointedR) {
+				layer.startMovingLayer(0);
+				lastPressedRClick = true;
+			} else if(lastPressedRClick) {
+				lastPressedRClick = false;
+				layer.stopMovingLayer();
+			}
+		}
+		return false;
 	}
 }

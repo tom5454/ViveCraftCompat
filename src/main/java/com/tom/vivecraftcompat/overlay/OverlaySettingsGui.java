@@ -7,8 +7,9 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.vivecraft.provider.ControllerType;
-import org.vivecraft.provider.MCVR;
+import org.vivecraft.client.VivecraftVRMod;
+import org.vivecraft.client_vr.provider.ControllerType;
+import org.vivecraft.client_vr.provider.MCVR;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -43,6 +44,8 @@ public class OverlaySettingsGui extends Frame {
 	private FlowLayout currentElementsLayout;
 	private DropDownBox<NamedElement<OverlayLock>> overlayLockBox;
 	private NameMapper<OverlayLock> overlayLockNames;
+	private DropDownBox<NamedElement<OverlayEnable>> overlayEnableBox;
+	private NameMapper<OverlayEnable> overlayEnableNames;
 	private Button btnAdd, btnDel;
 	private Set<ResourceLocation> allElements;
 	private Slider sliderScale;
@@ -102,6 +105,10 @@ public class OverlaySettingsGui extends Frame {
 		btnRename.setBounds(new Box(rx2, 5, 20, 20));
 		p.addElement(btnRename);
 
+		btnDel = new Button(gui, "-", ConfirmPopup.confirmHandler(this, gui.i18nFormat("vivecraftcompat.gui.overlay.delete"), this::deleteOverlay));
+		btnDel.setBounds(new Box(rx2, 30, 20, 20));
+		p.addElement(btnDel);
+
 		elementNames = new NameMapper<>(allElements, rl -> gui.i18nFormat(rl.toLanguageKey("overlay")));
 		elementsBox = new ListPicker<>(gui.getFrame(), elementNames.asList());
 		elementsBox.setBounds(new Box(5, 5, lw, 20));
@@ -115,17 +122,15 @@ public class OverlaySettingsGui extends Frame {
 			btnAdd.setEnabled(elementsBox.getSelected() != null);
 		});
 
-		overlayLockNames = new NameMapper<>(OverlayLock.values(), l -> gui.i18nFormat("vivecraftcompat.gui.overlay.lock." + l.name().toLowerCase(Locale.ROOT)));
-		overlayLockBox = new DropDownBox<>(gui.getFrame(), overlayLockNames.asList());
-		overlayLockBox.setBounds(new Box(rx, 30, rw, 20));
-		overlayLockNames.setSetter(overlayLockBox::setSelected);
-		p.addElement(overlayLockBox);
+		Panel rp = new Panel(gui);
+		rp.setBounds(new Box(0, 0, rw + 5, 100));
 
-		overlayLockBox.setAction(() -> {
-			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
-				overlaysBox.getSelected().overlay.layer.setLock(overlayLockBox.getSelected().getElem());
-			}
-		});
+		ScrollPanel rscp = new ScrollPanel(gui);
+		rscp.setDisplay(rp);
+		rscp.setBounds(new Box(lw + 5, 30, rw + 5, h - 30));
+		p.addElement(rscp);
+
+		initLayerSettings(rp, rw);
 
 		currentElementsScp = new ScrollPanel(gui);
 		currentElements = new Panel(gui);
@@ -139,32 +144,53 @@ public class OverlaySettingsGui extends Frame {
 
 		currentElementsLayout = new FlowLayout(currentElements, 5, 1);
 
-		btnDel = new Button(gui, "-", ConfirmPopup.confirmHandler(this, gui.i18nFormat("vivecraftcompat.gui.overlay.delete"), this::deleteOverlay));
-		btnDel.setBounds(new Box(rx2, 30, 20, 20));
-		p.addElement(btnDel);
+		updateCurrentElementsList();
+	}
+
+	private void initLayerSettings(Panel rp, int rw) {
+		FlowLayout layout = new FlowLayout(rp, 5, 1);
+
+		rp.addElement(new Label(gui, gui.i18nFormat("vivecraftcompat.gui.overlay.lock")).setBounds(new Box(5, 0, 100, 10)));
+
+		overlayLockNames = new NameMapper<>(OverlayLock.values(), l -> gui.i18nFormat("vivecraftcompat.gui.overlay.lock." + l.name().toLowerCase(Locale.ROOT)));
+		overlayLockBox = new DropDownBox<>(gui.getFrame(), overlayLockNames.asList());
+		overlayLockBox.setBounds(new Box(5, 0, rw, 20));
+		overlayLockNames.setSetter(overlayLockBox::setSelected);
+		rp.addElement(overlayLockBox);
+
+		overlayLockBox.setAction(() -> {
+			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
+				overlaysBox.getSelected().overlay.layer.setLock(overlayLockBox.getSelected().getElem());
+			}
+		});
+
+		Panel moveBtns = new Panel(gui);
+		moveBtns.setBounds(new Box(0, 0, rw, 20));
 
 		Button btnMoveL = new Button(gui, "L", () -> {
 			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
 				overlaysBox.getSelected().overlay.layer.startMovingLayer(1);
 			}
 		});
-		btnMoveL.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.moveL", MCVR.get().getOriginName(MCVR.get().getInputAction(MCVR.get().keyMenuButton).getLastOrigin()))));
-		btnMoveL.setBounds(new Box(rx, 55, 20, 20));
-		p.addElement(btnMoveL);
+		btnMoveL.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.moveL", MCVR.get().getOriginName(MCVR.get().getInputAction(VivecraftVRMod.INSTANCE.keyMenuButton).getLastOrigin()))));
+		btnMoveL.setBounds(new Box(5, 0, 20, 20));
+		moveBtns.addElement(btnMoveL);
 
 		Button btnMoveR = new Button(gui, "R", () -> {
 			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
 				overlaysBox.getSelected().overlay.layer.startMovingLayer(0);
 			}
 		});
-		btnMoveR.setBounds(new Box(rx + 25, 55, 20, 20));
-		btnMoveR.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.moveR", MCVR.get().getOriginName(MCVR.get().getInputAction(MCVR.get().keyMenuButton).getLastOrigin()))));
-		p.addElement(btnMoveR);
+		btnMoveR.setBounds(new Box(5 + 25, 0, 20, 20));
+		btnMoveR.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.moveR", MCVR.get().getOriginName(MCVR.get().getInputAction(VivecraftVRMod.INSTANCE.keyMenuButton).getLastOrigin()))));
+		moveBtns.addElement(btnMoveR);
+
+		rp.addElement(moveBtns);
 
 		sliderScale = new Slider(gui, formatScale(1));
 		sliderScale.setValue(1 / 5f);
-		sliderScale.setBounds(new Box(rx, 80, rw, 20));
-		p.addElement(sliderScale);
+		sliderScale.setBounds(new Box(5, 0, rw, 20));
+		rp.addElement(sliderScale);
 		sliderScale.setAction(() -> {
 			sliderScale.setText(formatScale(sliderScale.getValue() * 5));
 			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
@@ -173,7 +199,21 @@ public class OverlaySettingsGui extends Frame {
 			}
 		});
 
-		updateCurrentElementsList();
+		rp.addElement(new Label(gui, gui.i18nFormat("vivecraftcompat.gui.overlay.enable")).setBounds(new Box(5, 0, 100, 10)));
+
+		overlayEnableNames = new NameMapper<>(OverlayEnable.values(), l -> gui.i18nFormat("vivecraftcompat.gui.overlay.enable." + l.name().toLowerCase(Locale.ROOT)));
+		overlayEnableBox = new DropDownBox<>(gui.getFrame(), overlayEnableNames.asList());
+		overlayEnableBox.setBounds(new Box(5, 0, rw, 20));
+		overlayEnableNames.setSetter(overlayEnableBox::setSelected);
+		rp.addElement(overlayEnableBox);
+
+		overlayEnableBox.setAction(() -> {
+			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
+				overlaysBox.getSelected().overlay.enable = overlayEnableBox.getSelected().getElem();
+			}
+		});
+
+		layout.reflow();
 	}
 
 	private String formatScale(float def) {
@@ -240,11 +280,14 @@ public class OverlaySettingsGui extends Frame {
 		btnDel.setEnabled(en);
 		sliderScale.setEnabled(en);
 		overlayLockBox.setEnabled(en);
+		overlayEnableBox.setEnabled(en);
 		updateOutlines(null);
 		overlayLockNames.setValue(OverlayLock.FLOAT);
+		overlayEnableNames.setValue(OverlayEnable.ALWAYS);
 		if (en) {
 			HudOverlayScreen s = overlaysBox.getSelected().overlay;
 			overlayLockNames.setValue(s.layer.getLock());
+			overlayEnableNames.setValue(s.enable);
 			sliderScale.setValue(s.layer.getScale() / 5f);
 			sliderScale.setText(formatScale(s.layer.getScale()));
 			s.outline = true;

@@ -7,12 +7,13 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.vivecraft.provider.MCVR;
-import org.vivecraft.provider.openvr_jna.VRInputAction;
+import org.vivecraft.client_vr.provider.MCVR;
+import org.vivecraft.client_vr.provider.openvr_lwjgl.VRInputAction;
 
 import net.minecraftforge.common.MinecraftForge;
 
 import com.tom.vivecraftcompat.events.VRBindingsEvent;
+import com.tom.vivecraftcompat.overlay.OverlayManager;
 
 @Mixin(MCVR.class)
 public class MCVRMixin {
@@ -22,5 +23,10 @@ public class MCVRMixin {
 	private void processBindings(CallbackInfo cbi) {
 		if (!this.inputActions.isEmpty())
 			MinecraftForge.EVENT_BUS.post(new VRBindingsEvent());
+	}
+
+	@Inject(at = @At("RETURN"), method = "populateInputActions", remap = false)
+	private void populateInputActions(CallbackInfo cbi) {
+		OverlayManager.populateListeners();
 	}
 }

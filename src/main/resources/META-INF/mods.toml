@@ -25,7 +25,7 @@ updateJSONURL="https://raw.githubusercontent.com/tom5454/ViveCraftCompat/main/ve
 # A URL for the "homepage" for this mod, displayed in the mod UI
 displayURL="https://curseforge.com/minecraft/mc-mods/vivecraft-compat" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-# logoFile="icon.png" #optional
+logoFile="icon.png" #optional
 # A text field displayed in the mod UI
 credits="tom5454" #optional
 # A text field displayed in the mod UI
@@ -51,6 +51,12 @@ Fix various compatibility issues with ViveCraft and various other mods.
     modId="minecraft"
     mandatory=true
     versionRange="[1.19,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.vivecraftcompat]]
+    modId="vivecraft"
+    mandatory=true
+    versionRange="[1.0.1,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.vivecraftcompat]]

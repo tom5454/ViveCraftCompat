@@ -14,6 +14,8 @@
 	  "compat.create.CreateTrackBlockOutlineMixin",
 	  "compat.create.CreateControlsUtilMixin",
 	  "compat.create.CreateRaycastHelperMixin",
+	  "compat.create.CreateValueSettingsScreenMixin",
+	  "compat.create.CreateValueSettingsClientMixin",
 	  
 	  "compat.toms_storage.TSStorageModClientMixin",
 	  
@@ -27,7 +29,6 @@
 	  "compat.theoneprobe.OverlayRendererMixin",
 	  
 	  "MinecraftMixin",
-	  "VivecraftMovementInputMixin",
 	  "VRRendererMixin",
 	  "GameRendererMixin",
 	  "MCVRMixin",

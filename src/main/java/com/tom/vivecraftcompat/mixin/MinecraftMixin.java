@@ -25,6 +25,7 @@ public class MinecraftMixin implements MC {
 	private @Shadow float pausePartialTick;
 	private @Shadow @Final Timer timer;
 
+	//Pehkui issue in dev environment
 	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;getMaxHealth()F", remap = true), method = "renderSingleView", remap = false)
 	private float onGetMaxHealth(LocalPlayer player) {
 		try {
@@ -39,7 +40,7 @@ public class MinecraftMixin implements MC {
 		this.mainRenderTarget = mainRenderTarget;
 	}
 
-	@Inject(at = @At(value = "INVOKE", target = "Lorg/vivecraft/gameplay/screenhandlers/RadialHandler;isShowing()Z", remap = false), method = "newRunTick", remap = false)
+	@Inject(at = @At(value = "INVOKE", target = "Lorg/vivecraft/client_vr/gameplay/screenhandlers/RadialHandler;isShowing()Z", remap = false), method = "newRunTick", remap = false)
 	public void renderHudLayers(boolean a, CallbackInfo cbi) {
 		float f = this.pause ? this.pausePartialTick : this.timer.partialTick;
 		OverlayManager.drawLayers(f);

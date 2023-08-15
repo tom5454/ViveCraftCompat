@@ -8,4 +8,5 @@ public class ConfigKeys {
 	public static final String OVERLAY_POS = "pos";
 	public static final String OVERLAY_ROTATION = "rotation";
 	public static final String OVERLAY_LOCK = "lock";
+	public static final String OVERLAY_ENABLE = "enable";
 }

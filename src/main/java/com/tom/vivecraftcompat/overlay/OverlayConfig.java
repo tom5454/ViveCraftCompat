@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.vivecraft.utils.math.Matrix4f;
+import org.vivecraft.common.utils.math.Matrix4f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -29,6 +29,7 @@ public class OverlayConfig {
 
 			HudOverlayScreen ov = new HudOverlayScreen(key);
 			ov.setName(name);
+			ov.enable = OverlayEnable.byName(ce.getString(ConfigKeys.OVERLAY_ENABLE, ""));
 
 			for (int i = 0;i<oel.size();i++) {
 				String o = String.valueOf(oel.get(i));
@@ -39,7 +40,7 @@ public class OverlayConfig {
 			Layer layer = new Layer(ov);
 			ov.layer = layer;
 			layer.setScale(ce.getFloat(ConfigKeys.OVERLAY_SCALE, 1));
-			layer.setLock(OverlayLock.byName(ce.getString(ConfigKeys.OVERLAY_LOCK, "")));
+			layer.setLockDirect(OverlayLock.byName(ce.getString(ConfigKeys.OVERLAY_LOCK, "")));
 			ConfigEntry pos = ce.getEntry(ConfigKeys.OVERLAY_POS);
 			layer.setPos(new Vec3(
 					pos.getFloat("x", 0),
@@ -67,6 +68,7 @@ public class OverlayConfig {
 			if (l.getScreen() instanceof HudOverlayScreen h) {
 				ConfigEntry ce = ovs.getEntry(h.getId());
 				ce.setString(ConfigKeys.OVERLAY_NAME, h.getName());
+				ce.setString(ConfigKeys.OVERLAY_ENABLE, h.enable.name().toLowerCase(Locale.ROOT));
 
 				ConfigEntryList oel = ce.getEntryList(ConfigKeys.OVERLAY_ELEMENT_LIST);
 				h.overlays.forEach(e -> oel.add(e.toString()));

@@ -6,13 +6,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.vivecraft.ClientDataHolder;
-import org.vivecraft.VRState;
+import org.vivecraft.client_vr.ClientDataHolderVR;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.player.Input;
 
+import net.minecraftforge.client.event.MovementInputUpdateEvent;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.simibubi.create.content.contraptions.actors.trainControls.ControlsHandler;
@@ -20,11 +21,11 @@ import com.simibubi.create.content.redstone.link.controller.LinkedControllerClie
 import com.simibubi.create.content.redstone.link.controller.LinkedControllerClientHandler.Mode;
 import com.simibubi.create.foundation.utility.ControlsUtil;
 
-import com.tom.vivecraftcompat.events.VRMovementInputEvent;
+import com.tom.vivecraftcompat.VRMode;
 
 @Mixin(ControlsUtil.class)
 public class CreateControlsUtilMixin {
-
+	private static final ClientDataHolderVR DATA_HOLDER = ClientDataHolderVR.getInstance();
 	private static Vector<KeyMapping> patchedControls;
 	private static float lastFwd, lastLeft;
 
@@ -42,7 +43,7 @@ public class CreateControlsUtilMixin {
 
 	@Inject(at = @At("HEAD"), method = "isActuallyPressed", remap = false, cancellable = true)
 	private static void vrActuallyPressed(KeyMapping kb, CallbackInfoReturnable<Boolean> cbi) {
-		if(VRState.isVR && !ClientDataHolder.getInstance().vrSettings.seated && getPatchedControls().contains(kb)) {
+		if(VRMode.isVR() && !DATA_HOLDER.vrSettings.seated && getPatchedControls().contains(kb)) {
 			Minecraft mc = Minecraft.getInstance();
 			if(mc.player != null) {
 				cbi.setReturnValue(isMovementPressed(kb));
@@ -54,16 +55,18 @@ public class CreateControlsUtilMixin {
 		MinecraftForge.EVENT_BUS.addListener(CreateControlsUtilMixin::vrInputEvent);
 	}
 
-	private static void vrInputEvent(VRMovementInputEvent event) {
-		if(ControlsHandler.getContraption() != null || LinkedControllerClientHandler.MODE != Mode.IDLE) {
-			event.setCanceled(true);
-			lastFwd = event.getForwardImpulse();
-			lastLeft = event.getLeftImpulse();
-			event.newLeftImpulse = 0;
-			event.newForwardImpulse = 0;
-		} else {
-			lastFwd = 0;
-			lastLeft = 0;
+	private static void vrInputEvent(MovementInputUpdateEvent event) {
+		if(VRMode.isVR() && !DATA_HOLDER.vrSettings.seated) {
+			if(ControlsHandler.getContraption() != null || LinkedControllerClientHandler.MODE != Mode.IDLE) {
+				Input in = event.getInput();
+				lastFwd = in.forwardImpulse;
+				lastLeft = in.leftImpulse;
+				in.leftImpulse = 0;
+				in.forwardImpulse = 0;
+			} else {
+				lastFwd = 0;
+				lastLeft = 0;
+			}
 		}
 	}
 

@@ -209,15 +209,15 @@ dependencies {
   	implementation fg.deobf('curse.maven:oculus-581495:4578731')
   	
   	implementation fg.deobf("com.github.Virtuoel:Pehkui:3.7.0-1.19.2-forge")
-    implementation fg.deobf('local:vivecraft:1.19.2-0.0.15-forge')
+    implementation fg.deobf('local:vivecraft:1.19.2-1.0.1-forge')
     implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4631169')
   	
-  	implementation fg.deobf("com.tom5454.cpm:CustomPlayerModels-1.19:0.6.9a")
+  	implementation fg.deobf("com.tom5454.cpm:CustomPlayerModels-1.19:0.6.10a")
   	implementation fg.deobf("com.tom5454.toms_storage:TomsStorage-119:1.5.9")
   	
   	implementation fg.deobf("local:firstperson-forge:2.2.3-mc1.19.2")
   	implementation fg.deobf("local:vrapi:3.0.6-1.19.2-forge")
-  	implementation fg.deobf("local:immersivemc:1.4.0-beta1-1.19.2-forge")
+  	implementation fg.deobf("local:immersivemc:1.4.0-beta1.1-1.19.2-forge")
   	
   	implementation fg.deobf("local:create:1.19.2-0.5.1.c")
   	implementation fg.deobf("local:flywheel-forge:1.19.2-0.6.9-18")

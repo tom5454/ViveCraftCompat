@@ -2,9 +2,9 @@ package com.tom.vivecraftcompat.overlay;
 
 import java.util.function.Function;
 
-import org.vivecraft.ClientDataHolder;
-import org.vivecraft.api.VRData.VRDevicePose;
-import org.vivecraft.utils.math.Matrix4f;
+import org.vivecraft.client_vr.ClientDataHolderVR;
+import org.vivecraft.client_vr.VRData.VRDevicePose;
+import org.vivecraft.common.utils.math.Matrix4f;
 
 import net.minecraft.world.phys.Vec3;
 
@@ -15,12 +15,12 @@ public enum OverlayLock {
 	RIGHT_HAND(d -> LockedPosition.pose(d.vrPlayer.vrdata_room_pre.getController(0), 1.2f)),
 	BODY(d -> new LockedPosition(HMD.getLocked().getPosition())),
 	;
-	private static final ClientDataHolder DATA_HOLDER = ClientDataHolder.getInstance();
-	private Function<ClientDataHolder, LockedPosition> locked;
+	private static final ClientDataHolderVR DATA_HOLDER = ClientDataHolderVR.getInstance();
+	private Function<ClientDataHolderVR, LockedPosition> locked;
 
 	private OverlayLock() {}
 
-	private OverlayLock(Function<ClientDataHolder, LockedPosition> locked) {
+	private OverlayLock(Function<ClientDataHolderVR, LockedPosition> locked) {
 		this.locked = locked;
 	}
 

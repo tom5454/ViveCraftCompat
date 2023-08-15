@@ -6,4 +6,5 @@ public interface VRInteractableScreen {
 	boolean isUsingController();
 	boolean type(char ch);
 	boolean key(int key);
+	boolean interact(int key, boolean press);
 }

@@ -4,8 +4,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.vivecraft.render.VRPlayerModel_WithArms;
-import org.vivecraft.render.VRPlayerRenderer;
+import org.vivecraft.client.render.VRPlayerModel_WithArms;
+import org.vivecraft.client.render.VRPlayerRenderer;
 
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
