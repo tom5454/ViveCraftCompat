@@ -4,11 +4,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
-import net.minecraftforge.event.TickEvent;
+import net.minecraft.client.gui.GuiGraphics;
 
-import snownee.jade.util.ClientPlatformProxy;
+import snownee.jade.util.ClientProxy;
 
-@Mixin(ClientPlatformProxy.class)
+@Mixin(ClientProxy.class)
 public class JadeClientPlatformProxyMixin {
 	private @Shadow(remap = false) static boolean bossbarShown;
 
@@ -19,7 +19,7 @@ public class JadeClientPlatformProxyMixin {
 	 * @author tom5454
 	 * */
 	@Overwrite(remap = false)
-	private static void onRenderTick(TickEvent.RenderTickEvent event) {
+	public static void onRenderTick(GuiGraphics guiGraphics) {
 		bossbarShown = false;
 	}
 }

@@ -23,6 +23,7 @@ import org.vivecraft.common.utils.math.Vector3;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
@@ -33,7 +34,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 
 import com.tom.vivecraftcompat.VRMode;
 import com.tom.vivecraftcompat.access.MC;
@@ -60,8 +60,9 @@ public class OverlayManager {
 			mc.mc$setMainRenderTarget(layer.getFramebuffer());
 			layer.framebuffer.clear(Minecraft.ON_OSX);
 			layer.framebuffer.bindWrite(true);
-
-			((GameRendererExtension) minecraft.gameRenderer).drawScreen(partial, layer.screen, new PoseStack());
+			GuiGraphics guiGraphics = new GuiGraphics(minecraft, minecraft.renderBuffers().bufferSource());
+			((GameRendererExtension) minecraft.gameRenderer).drawScreen(partial, layer.screen, guiGraphics);
+			guiGraphics.flush();
 		}
 		overlayRendering = false;
 		mc.mc$setMainRenderTarget(bak);

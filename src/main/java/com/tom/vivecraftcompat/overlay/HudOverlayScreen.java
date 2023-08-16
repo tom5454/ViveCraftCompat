@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -16,7 +17,6 @@ import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.client.gui.overlay.NamedGuiOverlay;
 import net.minecraftforge.common.MinecraftForge;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 
 import com.tom.vivecraftcompat.overlay.OverlayManager.Layer;
@@ -36,7 +36,7 @@ public class HudOverlayScreen extends Screen {
 	}
 
 	@Override
-	public void render(PoseStack poseStack, int pMouseX, int pMouseY, float pPartialTick) {
+	public void render(GuiGraphics poseStack, int pMouseX, int pMouseY, float pPartialTick) {
 		if(this.minecraft.player == null || this.minecraft.gameMode == null || this.minecraft.level == null || !isEnabled())return;
 		int screenWidth = this.minecraft.getWindow().getGuiScaledWidth();
 		int screenHeight = this.minecraft.getWindow().getGuiScaledHeight();
@@ -54,18 +54,18 @@ public class HudOverlayScreen extends Screen {
 			}
 		});
 		if(outline) {
-			fill(poseStack, 0, 0, width, 1, 0xFFFF0000);
-			fill(poseStack, 0, 0, 1, height, 0xFFFF0000);
-			fill(poseStack, width - 1, 0, width, height, 0xFFFF0000);
-			fill(poseStack, 0, height - 1, width, height, 0xFFFF0000);
+			poseStack.fill(0, 0, width, 1, 0xFFFF0000);
+			poseStack.fill(0, 0, 1, height, 0xFFFF0000);
+			poseStack.fill(width - 1, 0, width, height, 0xFFFF0000);
+			poseStack.fill(0, height - 1, width, height, 0xFFFF0000);
 		}
 	}
 
-	private boolean pre(NamedGuiOverlay overlay, PoseStack poseStack) {
+	private boolean pre(NamedGuiOverlay overlay, GuiGraphics poseStack) {
 		return MinecraftForge.EVENT_BUS.post(new RenderGuiOverlayEvent.Pre(minecraft.getWindow(), poseStack, minecraft.getFrameTime(), overlay));
 	}
 
-	private void post(NamedGuiOverlay overlay, PoseStack poseStack) {
+	private void post(NamedGuiOverlay overlay, GuiGraphics poseStack) {
 		MinecraftForge.EVENT_BUS.post(new RenderGuiOverlayEvent.Post(minecraft.getWindow(), poseStack, minecraft.getFrameTime(), overlay));
 	}
 

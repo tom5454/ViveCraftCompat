@@ -19,14 +19,14 @@ public class CreateRaycastHelperMixin {
 
 	@Inject(at = @At("HEAD"), method = "getTraceOrigin", cancellable = true, remap = false)
 	private static void onGetTraceOrigin(Player playerIn, CallbackInfoReturnable<Vec3> cbi) {
-		if (playerIn.level.isClientSide && VRMode.isVR() && !DATA_HOLDER.vrSettings.seated) {
+		if (playerIn.level().isClientSide && VRMode.isVR() && !DATA_HOLDER.vrSettings.seated) {
 			cbi.setReturnValue(DATA_HOLDER.vrPlayer.vrdata_world_render.getController(0).getPosition());
 		}
 	}
 
 	@Inject(at = @At("HEAD"), method = "getTraceTarget", cancellable = true, remap = false)
 	private static void onGetTraceTarget(Player playerIn, double range, Vec3 origin, CallbackInfoReturnable<Vec3> cbi) {
-		if (playerIn.level.isClientSide && VRMode.isVR() && !DATA_HOLDER.vrSettings.seated) {
+		if (playerIn.level().isClientSide && VRMode.isVR() && !DATA_HOLDER.vrSettings.seated) {
 			Vec3 d = DATA_HOLDER.vrPlayer.vrdata_world_render.getController(0).getDirection();
 			cbi.setReturnValue(origin.add(d.x * range, d.y * range, d.z * range));
 		}

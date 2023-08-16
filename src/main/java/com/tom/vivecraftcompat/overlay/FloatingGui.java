@@ -4,11 +4,11 @@ import java.util.function.Function;
 
 import org.lwjgl.glfw.GLFW;
 import org.vivecraft.client.VivecraftVRMod;
-import org.vivecraft.client_vr.ClientDataHolderVR;
+import org.vivecraft.client_vr.extensions.GuiExtension;
 import org.vivecraft.client_vr.gameplay.screenhandlers.GuiHandler;
 import org.vivecraft.common.utils.math.Matrix4f;
 
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.phys.Vec2;
@@ -20,9 +20,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 
 import com.tom.cpl.gui.Frame;
@@ -187,7 +185,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 	}
 
 	@Override
-	public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+	public void render(GuiGraphics matrixStack, int mouseX, int mouseY, float partialTicks) {
 		double cx, cy;
 		/*if(activecontroller == ControllerType.LEFT) {
 			cx = (double)(this.cursorX1 * this.width / this.minecraft.getWindow().getGuiScaledWidth()) * (double)this.minecraft.getWindow().getGuiScaledWidth() / this.minecraft.getWindow().getScreenWidth();
@@ -204,35 +202,11 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 			super.render(matrixStack, -1, -1, partialTicks);
 
 		if(PointedR)
-			drawMouseMenuQuad(mx, my);
+			((GuiExtension) this.minecraft.gui).drawMouseMenuQuad(mx, my);
 	}
 
 	@Override
-	public void renderBackground(PoseStack pPoseStack, int pVOffset) {}
-
-	private void drawMouseMenuQuad(int mouseX, int mouseY) {
-		RenderSystem.enableBlend();
-		RenderSystem.disableDepthTest();
-		//uhhhh //RenderSystem.disableLighting();
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, Screen.GUI_ICONS_LOCATION);
-		float f = 16.0F * ClientDataHolderVR.getInstance().vrSettings.menuCrosshairScale;
-		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ZERO, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-		this.drawCentredTexturedModalRect(mouseX, mouseY, f, f, 0, 0, 15, 15);
-		RenderSystem.disableBlend();
-	}
-
-	private void drawCentredTexturedModalRect(int centreX, int centreY, float width, float height, int u, int v, int texWidth, int texHeight) {
-		float f = 0.00390625F;
-		float f1 = 0.00390625F;
-		BufferBuilder bufferbuilder = Tesselator.getInstance().getBuilder();
-		bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		bufferbuilder.vertex(centreX - width / 2.0F, centreY + height / 2.0F, this.getBlitOffset()).uv((u + 0) * f, (v + texHeight) * f1).endVertex();
-		bufferbuilder.vertex(centreX + width / 2.0F, centreY + height / 2.0F, this.getBlitOffset()).uv((u + texWidth) * f, (v + texHeight) * f1).endVertex();
-		bufferbuilder.vertex(centreX + width / 2.0F, centreY - height / 2.0F, this.getBlitOffset()).uv((u + texWidth) * f, (v + 0) * f1).endVertex();bufferbuilder.vertex(centreX - width / 2.0F, centreY - height / 2.0F, this.getBlitOffset()).uv((u + 0) * f, (v + 0) * f1).endVertex();
-		BufferUploader.drawWithShader(bufferbuilder.end());
-	}
+	public void renderBackground(GuiGraphics p_283688_) {}
 
 	public void drawTexture(int x, int y, int width, int height, float u1, float v1, float u2, float v2, RenderTarget framebuffer) {
 		x += getOffset().x;
@@ -248,8 +222,8 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 		Tesselator tessellator = Tesselator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuilder();
 		bufferbuilder.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		float bo = getBlitOffset() + 1;
-		com.mojang.math.Matrix4f matrix = matrixStack.last().pose();
+		float bo = 0;
+		org.joml.Matrix4f matrix = graphics.pose().last().pose();
 		bufferbuilder.vertex(matrix, x, y + height, bo).uv(u1, v2).endVertex();
 		bufferbuilder.vertex(matrix, x + width, y + height, bo).uv(u2, v2).endVertex();
 		bufferbuilder.vertex(matrix, x + width, y, bo).uv(u2, v1).endVertex();

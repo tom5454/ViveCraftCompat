@@ -54,12 +54,12 @@ public class Client {
 			for (GuiEventListener l : evt.getListenersList()) {
 				if(l instanceof Button b) {
 					if(b.getMessage().equals(CAM_BTN) && b instanceof BTN btn) {
-						b = new Button(b.x + b.getWidth() + 5, b.y, 100, 20, OVERLAY_BTN, __ -> {
+						b = Button.builder(OVERLAY_BTN, __ -> {
 							Layer layer = new Layer(i -> new FloatingGui(OverlaySettingsGui::new, i));
 							layer.spawnOverlay(ControllerType.RIGHT);
 							OverlayManager.addLayer(layer);
 							Minecraft.getInstance().setScreen(null);
-						});
+						}).bounds(b.getX() + b.getWidth() + 5, b.getY(), 100, 20).build();
 						evt.addListener(b);
 						break;
 					}
