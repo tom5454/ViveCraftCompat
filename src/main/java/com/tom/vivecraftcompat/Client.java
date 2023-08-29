@@ -3,6 +3,7 @@ package com.tom.vivecraftcompat;
 import java.io.File;
 
 import org.vivecraft.client_vr.ClientDataHolderVR;
+import org.vivecraft.client_vr.VRData.VRDevicePose;
 import org.vivecraft.client_vr.provider.ControllerType;
 import org.vivecraft.client_vr.render.RenderPass;
 
@@ -11,6 +12,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
@@ -76,17 +78,23 @@ public class Client {
 			}
 			FirstPersonModelCore.config.vanillaHands = true;
 
-			float yr = event.getEntity().getYHeadRot();
-			float s = -0.2f;
-			float y = -1.52f;
+			float s = -0.3f;
+			float y = -1.82f;
 			if (event.getEntity().isVisuallySwimming()) {
 				y += 1f;
-				s -= 0.3f;
+				s -= 0.4f;
 			} else if(event.getEntity().isShiftKeyDown()) {
 				y += 0.1f;
 			}
 
-			event.getPoseStack().translate(-Math.sin(Math.toRadians(yr)) * s, y, Math.cos(Math.toRadians(yr)) * s);
+			VRDevicePose eye = DATA_HOLDER.vrPlayer.vrdata_world_render.getEye(DATA_HOLDER.currentPass);
+			VRDevicePose center = DATA_HOLDER.vrPlayer.vrdata_world_render.getEye(RenderPass.CENTER);
+			s *= 8;
+			Vec3 renderOff = DATA_HOLDER.vrPlayer.vrdata_world_render.getHeadPivot().subtract(center.getPosition()).multiply(-s, 1, -s).add(0, y, 0);
+
+			renderOff = center.getPosition().subtract(eye.getPosition()).add(renderOff);
+
+			event.getPoseStack().translate(renderOff.x, renderOff.y, renderOff.z);
 		}
 	}
 
