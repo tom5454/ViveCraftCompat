@@ -24,10 +24,11 @@ import org.vivecraft.common.utils.math.Vector3;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.gui.OverlayRegistry;
+import net.minecraftforge.client.gui.OverlayRegistry.OverlayEntry;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -68,10 +69,10 @@ public class OverlayManager {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static void overlayPre(RenderGuiOverlayEvent.Pre event) {
+	public static void overlayPre(RenderGameOverlayEvent.PreLayer event) {
 		if(overlayRendering || !VRMode.isVR())return;
-		ResourceLocation rl = event.getOverlay().id();
-		if(isOverlayDetached(rl)) {
+		OverlayEntry e = OverlayRegistry.getEntry(event.getOverlay());
+		if(e != null && isOverlayDetached(e.getDisplayName())) {
 			event.setCanceled(true);
 		}
 	}
@@ -103,7 +104,7 @@ public class OverlayManager {
 		});
 	}
 
-	public static boolean isOverlayDetached(ResourceLocation rl) {
+	public static boolean isOverlayDetached(String rl) {
 		return VRMode.isVR() && screens.stream().anyMatch(h -> h.screen instanceof HudOverlayScreen s && s.isEnabled() && s.overlays.contains(rl));
 	}
 

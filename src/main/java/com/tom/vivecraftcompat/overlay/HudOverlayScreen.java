@@ -6,14 +6,13 @@ import java.util.List;
 import org.slf4j.Logger;
 
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.TextComponent;
 
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.client.gui.overlay.NamedGuiOverlay;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.IIngameOverlay;
+import net.minecraftforge.client.gui.OverlayRegistry;
+import net.minecraftforge.client.gui.OverlayRegistry.OverlayEntry;
 import net.minecraftforge.common.MinecraftForge;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -23,7 +22,7 @@ import com.tom.vivecraftcompat.overlay.OverlayManager.Layer;
 
 public class HudOverlayScreen extends Screen {
 	public static final Logger LOGGER = LogUtils.getLogger();
-	public List<ResourceLocation> overlays = new ArrayList<>();
+	public List<String> overlays = new ArrayList<>();
 	private final String id;
 	private String name;
 	public boolean outline;
@@ -31,7 +30,7 @@ public class HudOverlayScreen extends Screen {
 	public OverlayEnable enable = OverlayEnable.ALWAYS;
 
 	public HudOverlayScreen(String id) {
-		super(Component.literal(""));
+		super(new TextComponent(""));
 		this.id = id;
 	}
 
@@ -41,15 +40,14 @@ public class HudOverlayScreen extends Screen {
 		int screenWidth = this.minecraft.getWindow().getGuiScaledWidth();
 		int screenHeight = this.minecraft.getWindow().getGuiScaledHeight();
 		overlays.forEach(id -> {
-			NamedGuiOverlay entry = GuiOverlayManager.findOverlay(id);
+			OverlayEntry entry = OverlayRegistry.orderedEntries().stream().filter(e -> e.getDisplayName().equals(id)).findFirst().orElse(null);
 			if(entry != null) {
 				try {
-					IGuiOverlay overlay = entry.overlay();
-					if (pre(entry, poseStack)) return;
-					overlay.render((ForgeGui) minecraft.gui, poseStack, pPartialTick, screenWidth, screenHeight);
-					post(entry, poseStack);
+					if (pre(entry.getOverlay(), poseStack)) return;
+					entry.getOverlay().render((ForgeIngameGui) minecraft.gui, poseStack, pPartialTick, screenWidth, screenHeight);
+					post(entry.getOverlay(), poseStack);
 				} catch (Exception e) {
-					LOGGER.error("Error rendering overlay '{}'", entry.id(), e);
+					LOGGER.error("Error rendering overlay '{}'", entry.getDisplayName(), e);
 				}
 			}
 		});
@@ -61,12 +59,14 @@ public class HudOverlayScreen extends Screen {
 		}
 	}
 
-	private boolean pre(NamedGuiOverlay overlay, PoseStack poseStack) {
-		return MinecraftForge.EVENT_BUS.post(new RenderGuiOverlayEvent.Pre(minecraft.getWindow(), poseStack, minecraft.getFrameTime(), overlay));
+	private boolean pre(IIngameOverlay overlay, PoseStack poseStack) {
+		RenderGameOverlayEvent parent = new RenderGameOverlayEvent(poseStack, minecraft.getFrameTime(), minecraft.getWindow());
+		return MinecraftForge.EVENT_BUS.post(new RenderGameOverlayEvent.PreLayer(poseStack, parent, overlay));
 	}
 
-	private void post(NamedGuiOverlay overlay, PoseStack poseStack) {
-		MinecraftForge.EVENT_BUS.post(new RenderGuiOverlayEvent.Post(minecraft.getWindow(), poseStack, minecraft.getFrameTime(), overlay));
+	private void post(IIngameOverlay overlay, PoseStack poseStack) {
+		RenderGameOverlayEvent parent = new RenderGameOverlayEvent(poseStack, minecraft.getFrameTime(), minecraft.getWindow());
+		MinecraftForge.EVENT_BUS.post(new RenderGameOverlayEvent.PostLayer(poseStack, parent, overlay));
 	}
 
 	@Override

@@ -2,15 +2,13 @@ package com.tom.vivecraftcompat.mixin.compat.jade;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
 
-import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.TickEvent.RenderTickEvent;
 
-import snownee.jade.util.ClientPlatformProxy;
+import mcp.mobius.waila.WailaClient;
 
-@Mixin(ClientPlatformProxy.class)
+@Mixin(WailaClient.class)
 public class JadeClientPlatformProxyMixin {
-	private @Shadow(remap = false) static boolean bossbarShown;
 
 	/**
 	 * Disable original overlay rendering code
@@ -19,7 +17,6 @@ public class JadeClientPlatformProxyMixin {
 	 * @author tom5454
 	 * */
 	@Overwrite(remap = false)
-	private static void onRenderTick(TickEvent.RenderTickEvent event) {
-		bossbarShown = false;
+	public static void onRenderTick(RenderTickEvent event) {
 	}
 }

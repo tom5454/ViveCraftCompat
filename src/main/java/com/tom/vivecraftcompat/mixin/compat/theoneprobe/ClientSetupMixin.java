@@ -3,7 +3,7 @@ package com.tom.vivecraftcompat.mixin.compat.theoneprobe;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-import net.minecraftforge.client.event.RenderGuiOverlayEvent.Pre;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
 import mcjty.theoneprobe.rendering.ClientSetup;
 

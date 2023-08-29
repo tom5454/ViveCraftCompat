@@ -15,5 +15,5 @@ public class JMForgeHudOverlayEventsMixin {
 	 * @author tom5454
 	 * */
 	@Overwrite(remap = false)
-	public void preOverlay(net.minecraftforge.client.event.RenderGuiEvent.Pre event) {}
+	public void preOverlay(net.minecraftforge.client.event.RenderGameOverlayEvent.Pre event) {}
 }

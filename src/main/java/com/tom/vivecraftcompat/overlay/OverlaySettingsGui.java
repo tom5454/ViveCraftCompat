@@ -11,10 +11,8 @@ import org.vivecraft.client.VivecraftVRMod;
 import org.vivecraft.client_vr.provider.ControllerType;
 import org.vivecraft.client_vr.provider.MCVR;
 
-import net.minecraft.resources.ResourceLocation;
-
-import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
-import net.minecraftforge.client.gui.overlay.NamedGuiOverlay;
+import net.minecraftforge.client.gui.OverlayRegistry;
+import net.minecraftforge.client.gui.OverlayRegistry.OverlayEntry;
 
 import com.tom.cpl.gui.Frame;
 import com.tom.cpl.gui.IGui;
@@ -37,8 +35,8 @@ import com.tom.vivecraftcompat.overlay.OverlayManager.Layer;
 public class OverlaySettingsGui extends Frame {
 	private List<OverlayElement> overlays;
 	private DropDownBox<OverlayElement> overlaysBox;
-	private NameMapper<ResourceLocation> elementNames;
-	private ListPicker<NamedElement<ResourceLocation>> elementsBox;
+	private NameMapper<String> elementNames;
+	private ListPicker<NamedElement<String>> elementsBox;
 	private ScrollPanel currentElementsScp;
 	private Panel currentElements;
 	private FlowLayout currentElementsLayout;
@@ -47,7 +45,7 @@ public class OverlaySettingsGui extends Frame {
 	private DropDownBox<NamedElement<OverlayEnable>> overlayEnableBox;
 	private NameMapper<OverlayEnable> overlayEnableNames;
 	private Button btnAdd, btnDel;
-	private Set<ResourceLocation> allElements;
+	private Set<String> allElements;
 	private Slider sliderScale;
 
 	public OverlaySettingsGui(IGui gui) {
@@ -62,7 +60,7 @@ public class OverlaySettingsGui extends Frame {
 
 	@Override
 	public void initFrame(int width, int height) {
-		allElements = GuiOverlayManager.getOverlays().stream().map(NamedGuiOverlay::id).collect(Collectors.toSet());
+		allElements = OverlayRegistry.orderedEntries().stream().map(OverlayEntry::getDisplayName).collect(Collectors.toSet());
 
 		overlays = new ArrayList<>();
 		overlays.add(new OverlayElement(null));
@@ -109,7 +107,7 @@ public class OverlaySettingsGui extends Frame {
 		btnDel.setBounds(new Box(rx2, 30, 20, 20));
 		p.addElement(btnDel);
 
-		elementNames = new NameMapper<>(allElements, rl -> gui.i18nFormat(rl.toLanguageKey("overlay")));
+		elementNames = new NameMapper<>(allElements, rl -> rl);
 		elementsBox = new ListPicker<>(gui.getFrame(), elementNames.asList());
 		elementsBox.setBounds(new Box(5, 5, lw, 20));
 		p.addElement(elementsBox);
@@ -238,7 +236,7 @@ public class OverlaySettingsGui extends Frame {
 			} else {
 				ov = overlaysBox.getSelected().overlay;
 			}
-			ResourceLocation select = elementsBox.getSelected().getElem();
+			String select = elementsBox.getSelected().getElem();
 			ov.overlays.add(select);
 			allElements.remove(select);
 			elementNames.refreshValues();
@@ -296,7 +294,7 @@ public class OverlaySettingsGui extends Frame {
 
 				pn.setBounds(new Box(0, 0, w, 30));
 
-				pn.addElement(new Label(gui, gui.i18nFormat(l.toLanguageKey("overlay"))).setBounds(new Box(5, 5, 0, 0)));
+				pn.addElement(new Label(gui, l).setBounds(new Box(5, 5, 0, 0)));
 
 				Button del = new Button(gui, "-", () -> {
 					s.overlays.remove(l);

@@ -3,6 +3,7 @@ package com.tom.vivecraftcompat;
 import java.io.File;
 
 import org.vivecraft.client_vr.ClientDataHolderVR;
+import org.vivecraft.client_vr.VRData.VRDevicePose;
 import org.vivecraft.client_vr.provider.ControllerType;
 import org.vivecraft.client_vr.render.RenderPass;
 
@@ -11,14 +12,14 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.world.phys.Vec3;
 
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import com.tom.cpl.config.ModConfigFile;
@@ -34,10 +35,11 @@ import dev.tr7zw.firstperson.FirstPersonModelCore;
 public class Client {
 	private static final ClientDataHolderVR DATA_HOLDER = ClientDataHolderVR.getInstance();
 	public static ModConfigFile config;
-	private static final Component CAM_BTN = Component.translatable("vivecraft.gui.movethirdpersoncam");
-	private static final Component OVERLAY_BTN = Component.translatable("vivecraftcompat.gui.overlays");
+	private static final Component CAM_BTN = new TranslatableComponent("vivecraft.gui.movethirdpersoncam");
+	private static final Component OVERLAY_BTN = new TranslatableComponent("vivecraftcompat.gui.overlays");
 
 	public static void init() {
+		registerOverlays();
 		if(ModList.get().isLoaded("firstpersonmod")) {
 			MinecraftForge.EVENT_BUS.addListener(Client::playerRenderPreFPM);
 		}
@@ -49,7 +51,7 @@ public class Client {
 	}
 
 	@SubscribeEvent
-	public static void initGui(ScreenEvent.Init.Post evt) {
+	public static void initGui(ScreenEvent.InitScreenEvent.Post evt) {
 		if (VRMode.isVR() && evt.getScreen() instanceof PauseScreen) {
 			for (GuiEventListener l : evt.getListenersList()) {
 				if(l instanceof Button b) {
@@ -76,27 +78,32 @@ public class Client {
 			}
 			FirstPersonModelCore.config.vanillaHands = true;
 
-			float yr = event.getEntity().getYHeadRot();
-			float s = -0.2f;
-			float y = -1.52f;
+			float s = -0.3f;
+			float y = -1.82f;
 			if (event.getEntity().isVisuallySwimming()) {
 				y += 1f;
-				s -= 0.3f;
+				s -= 0.4f;
 			} else if(event.getEntity().isShiftKeyDown()) {
 				y += 0.1f;
 			}
 
-			event.getPoseStack().translate(-Math.sin(Math.toRadians(yr)) * s, y, Math.cos(Math.toRadians(yr)) * s);
+			VRDevicePose eye = DATA_HOLDER.vrPlayer.vrdata_world_render.getEye(DATA_HOLDER.currentPass);
+			VRDevicePose center = DATA_HOLDER.vrPlayer.vrdata_world_render.getEye(RenderPass.CENTER);
+			s *= 8;
+			Vec3 renderOff = DATA_HOLDER.vrPlayer.vrdata_world_render.getHeadPivot().subtract(center.getPosition()).multiply(-s, 1, -s).add(0, y, 0);
+
+			renderOff = center.getPosition().subtract(eye.getPosition()).add(renderOff);
+
+			event.getPoseStack().translate(renderOff.x, renderOff.y, renderOff.z);
 		}
 	}
 
 	public static void preInit() {
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::registerOverlays);
 	}
 
-	public static void registerOverlays(RegisterGuiOverlaysEvent event) {
-		if(ModList.get().isLoaded("jade"))JadeOverlay.register(event);
-		if(ModList.get().isLoaded("journeymap"))JourneyMapOverlay.register(event);
-		if(ModList.get().isLoaded("theoneprobe"))TOPOverlay.register(event);
+	public static void registerOverlays() {
+		if(ModList.get().isLoaded("jade"))JadeOverlay.register();
+		if(ModList.get().isLoaded("journeymap"))JourneyMapOverlay.register();
+		if(ModList.get().isLoaded("theoneprobe"))TOPOverlay.register();
 	}
 }

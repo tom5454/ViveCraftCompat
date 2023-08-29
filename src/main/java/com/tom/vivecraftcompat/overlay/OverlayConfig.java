@@ -7,7 +7,6 @@ import java.util.Locale;
 import org.vivecraft.common.utils.math.Matrix4f;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 import com.tom.cpl.config.ConfigEntry;
@@ -32,9 +31,7 @@ public class OverlayConfig {
 			ov.enable = OverlayEnable.byName(ce.getString(ConfigKeys.OVERLAY_ENABLE, ""));
 
 			for (int i = 0;i<oel.size();i++) {
-				String o = String.valueOf(oel.get(i));
-				ResourceLocation id = ResourceLocation.tryParse(o);
-				if(id != null)ov.overlays.add(id);
+				ov.overlays.add(String.valueOf(oel.get(i)));
 			}
 
 			Layer layer = new Layer(ov);
@@ -71,7 +68,7 @@ public class OverlayConfig {
 				ce.setString(ConfigKeys.OVERLAY_ENABLE, h.enable.name().toLowerCase(Locale.ROOT));
 
 				ConfigEntryList oel = ce.getEntryList(ConfigKeys.OVERLAY_ELEMENT_LIST);
-				h.overlays.forEach(e -> oel.add(e.toString()));
+				h.overlays.forEach(oel::add);
 
 				ce.setString(ConfigKeys.OVERLAY_LOCK, l.getLock().name().toLowerCase(Locale.ROOT));
 				ce.setFloat(ConfigKeys.OVERLAY_SCALE, l.getScale());

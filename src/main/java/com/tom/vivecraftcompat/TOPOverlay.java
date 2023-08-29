@@ -6,8 +6,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraftforge.client.gui.ForgeIngameGui;
+import net.minecraftforge.client.gui.OverlayRegistry;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -18,11 +18,11 @@ import mcjty.theoneprobe.keys.KeyBindings;
 import mcjty.theoneprobe.rendering.OverlayRenderer;
 
 public class TOPOverlay {
-	public static void register(RegisterGuiOverlaysEvent event) {
-		event.registerAboveAll("theoneprobe", TOPOverlay::render);
+	public static void register() {
+		OverlayRegistry.registerOverlayTop("The One Probe", TOPOverlay::render);
 	}
 
-	public static void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
+	public static void render(ForgeIngameGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
 		if (Config.holdKeyToMakeVisible.get()) {
 			if (!KeyBindings.toggleVisible.isDown()) {
 				return;
