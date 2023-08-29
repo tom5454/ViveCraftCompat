@@ -59,6 +59,8 @@ minecraft {
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'vivecraftcompat'
+            
+            property 'production', 'true'
 
             mods {
                 vivecraftcompat {
@@ -212,7 +214,8 @@ dependencies {
     implementation fg.deobf('local:vivecraft:1.19.2-1.0.1-forge')
     implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4631169')
   	
-  	implementation fg.deobf("com.tom5454.cpm:CustomPlayerModels-1.19:0.6.10a")
+  	//implementation fg.deobf("com.tom5454.cpm:CustomPlayerModels-1.19:0.6.10a")
+  	implementation fg.deobf("local:CustomPlayerModels-1.19:0.6.10b-pre6")
   	implementation fg.deobf("com.tom5454.toms_storage:TomsStorage-119:1.5.9")
   	
   	implementation fg.deobf("local:firstperson-forge:2.2.3-mc1.19.2")
@@ -222,7 +225,7 @@ dependencies {
   	implementation fg.deobf("local:create:1.19.2-0.5.1.c")
   	implementation fg.deobf("local:flywheel-forge:1.19.2-0.6.9-18")
   	implementation fg.deobf("com.tterrag.registrate:Registrate:MC1.19-1.1.5")
-  	//implementation fg.deobf('local:Steam_Rails:1.4.3+forge-mc1.19.2')
+  	implementation fg.deobf('local:Steam_Rails:1.5.0+forge-mc1.19.2')
   	
   	implementation fg.deobf("local:Jade:1.19.1-forge-8.8.1")
   	implementation fg.deobf("curse.maven:the-twilight-forest-227639:4389567")

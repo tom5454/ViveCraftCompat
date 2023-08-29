@@ -17,7 +17,7 @@ public class TSStorageModClientMixin {
 
 	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;pick(DFZ)Lnet/minecraft/world/phys/HitResult;", remap = true), method = "renderWorldOutline", remap = false)
 	private static HitResult pickBlock(Player player, double pHitDistance, float pPartialTicks, boolean pHitFluids) {
-		if (VRMode.isVR() && !DATA_HOLDER.vrSettings.seated)
+		if (VRMode.isVRStanding())
 			return DATA_HOLDER.vrPlayer.rayTraceBlocksVR(DATA_HOLDER.vrPlayer.vrdata_world_render, 0, pHitDistance, pHitFluids);
 		else
 			return player.pick(pHitDistance, pPartialTicks, pHitFluids);
