@@ -2,10 +2,8 @@ package com.tom.vivecraftcompat;
 
 import java.io.File;
 
-import org.vivecraft.client_vr.ClientDataHolderVR;
-import org.vivecraft.client_vr.VRData.VRDevicePose;
+import org.vivecraft.client.gui.settings.GuiMainVRSettings;
 import org.vivecraft.client_vr.provider.ControllerType;
-import org.vivecraft.client_vr.render.RenderPass;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
@@ -13,9 +11,7 @@ import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.phys.Vec3;
 
-import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -33,16 +29,14 @@ import com.tom.vivecraftcompat.overlay.OverlaySettingsGui;
 import dev.tr7zw.firstperson.FirstPersonModelCore;
 
 public class Client {
-	private static final ClientDataHolderVR DATA_HOLDER = ClientDataHolderVR.getInstance();
 	public static ModConfigFile config;
 	private static final Component CAM_BTN = new TranslatableComponent("vivecraft.gui.movethirdpersoncam");
 	private static final Component OVERLAY_BTN = new TranslatableComponent("vivecraftcompat.gui.overlays");
+	private static final Component RENDERING_BTN = new TranslatableComponent("vivecraft.options.screen.stereorendering.button");
+	private static final Component FP_CONFIG_BTN = new TranslatableComponent("vivecraftcompat.gui.firstpersonmod.config");
 
 	public static void init() {
 		registerOverlays();
-		if(ModList.get().isLoaded("firstpersonmod")) {
-			MinecraftForge.EVENT_BUS.addListener(Client::playerRenderPreFPM);
-		}
 		MinecraftForge.EVENT_BUS.register(OverlayManager.class);
 		MinecraftForge.EVENT_BUS.register(Client.class);
 
@@ -67,34 +61,18 @@ public class Client {
 					}
 				}
 			}
-		}
-	}
-
-	public static void playerRenderPreFPM(RenderPlayerEvent.Pre event) {
-		if(VRMode.isVR() && FirstPersonModelCore.isRenderingPlayer) {
-			if(DATA_HOLDER.currentPass == RenderPass.THIRD || DATA_HOLDER.currentPass == RenderPass.CAMERA) {
-				event.setCanceled(true);
-				return;
+		} else if(evt.getScreen() instanceof GuiMainVRSettings) {
+			for (GuiEventListener l : evt.getListenersList()) {
+				if(l instanceof Button b) {
+					if(ModList.get().isLoaded("firstpersonmod") && b.getMessage().equals(RENDERING_BTN) && b instanceof BTN btn) {
+						b = new Button(b.x, b.y + 126, 150, 20, FP_CONFIG_BTN, __ -> {
+							Minecraft.getInstance().setScreen(FirstPersonModelCore.instance.createConfigScreen(evt.getScreen()));
+						});
+						evt.addListener(b);
+						break;
+					}
+				}
 			}
-			FirstPersonModelCore.config.vanillaHands = true;
-
-			float s = -0.3f;
-			float y = -1.82f;
-			if (event.getEntity().isVisuallySwimming()) {
-				y += 1f;
-				s -= 0.4f;
-			} else if(event.getEntity().isShiftKeyDown()) {
-				y += 0.1f;
-			}
-
-			VRDevicePose eye = DATA_HOLDER.vrPlayer.vrdata_world_render.getEye(DATA_HOLDER.currentPass);
-			VRDevicePose center = DATA_HOLDER.vrPlayer.vrdata_world_render.getEye(RenderPass.CENTER);
-			s *= 8;
-			Vec3 renderOff = DATA_HOLDER.vrPlayer.vrdata_world_render.getHeadPivot().subtract(center.getPosition()).multiply(-s, 1, -s).add(0, y, 0);
-
-			renderOff = center.getPosition().subtract(eye.getPosition()).add(renderOff);
-
-			event.getPoseStack().translate(renderOff.x, renderOff.y, renderOff.z);
 		}
 	}
 

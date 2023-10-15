@@ -23,8 +23,9 @@ public class FPMVRPlayerRendererMixin extends PlayerRenderer {
 	@Inject(at = @At("RETURN"), method = "setModelProperties")
 	public void onSetModelProperties(AbstractClientPlayer pClientPlayer, CallbackInfo cbi) {
 		if (FirstPersonModelCore.isRenderingPlayer && getModel() instanceof VRPlayerModel_WithArms<AbstractClientPlayer> model) {
-			model.rightHand.visible = false;
-			model.leftHand.visible = false;
+			boolean v = !FirstPersonModelCore.instance.showVanillaHands();
+			model.rightHand.visible = v;
+			model.leftHand.visible = v;
 		}
 	}
 }

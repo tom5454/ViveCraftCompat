@@ -20,6 +20,7 @@
 	
 	"vivecraftcompat.gui.create.value_settings.click_to_confirm": "Click to Confirm",
 	"vivecraftcompat.gui.create.elevator.floor_select": "Select Floor",
+	"vivecraftcompat.gui.firstpersonmod.config": "First Person Config",
 	
 	"tooltip.vivecraftcompat.overlay.moveL": "Move overlay with the Left Controller\\Press %s to stop moving",
 	"tooltip.vivecraftcompat.overlay.moveR": "Move overlay with the Right Controller\\Press %s to stop moving",

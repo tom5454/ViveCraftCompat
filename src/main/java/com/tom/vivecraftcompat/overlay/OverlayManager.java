@@ -11,12 +11,12 @@ import org.vivecraft.client.utils.Utils;
 import org.vivecraft.client_vr.ClientDataHolderVR;
 import org.vivecraft.client_vr.VRData;
 import org.vivecraft.client_vr.VRTextureTarget;
-import org.vivecraft.client_vr.extensions.GameRendererExtension;
 import org.vivecraft.client_vr.gameplay.screenhandlers.GuiHandler;
 import org.vivecraft.client_vr.gameplay.screenhandlers.KeyboardHandler;
 import org.vivecraft.client_vr.provider.ControllerType;
 import org.vivecraft.client_vr.provider.MCVR;
 import org.vivecraft.client_vr.provider.openvr_lwjgl.VRInputAction.KeyListener;
+import org.vivecraft.client_vr.render.helpers.RenderHelper;
 import org.vivecraft.common.utils.math.Matrix4f;
 import org.vivecraft.common.utils.math.Quaternion;
 import org.vivecraft.common.utils.math.Vector3;
@@ -62,7 +62,7 @@ public class OverlayManager {
 			layer.framebuffer.clear(Minecraft.ON_OSX);
 			layer.framebuffer.bindWrite(true);
 
-			((GameRendererExtension) minecraft.gameRenderer).drawScreen(partial, layer.screen, new PoseStack());
+			RenderHelper.drawScreen(partial, layer.screen, new PoseStack());
 		}
 		overlayRendering = false;
 		mc.mc$setMainRenderTarget(bak);
