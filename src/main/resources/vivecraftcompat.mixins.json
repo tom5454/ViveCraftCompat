@@ -9,6 +9,7 @@
   ],
   "client": [
 	  "compat.firstpersonmod.FPMVRPlayerRendererMixin",
+	  "compat.firstpersonmod.FPMItemInHandMixin",
 	  
 	  "compat.create.CreateBigOutlinesMixin",
 	  "compat.create.CreateTrackBlockOutlineMixin",
@@ -31,7 +32,7 @@
 	  
 	  "MinecraftMixin",
 	  "VRRendererMixin",
-	  "GameRendererMixin",
+	  "VREffectsHelperMixin",
 	  "MCVRMixin",
 	  "VRPlayerMixin",
 	  "ButtonMixin",
