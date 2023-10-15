@@ -202,7 +202,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 			super.render(matrixStack, -1, -1, partialTicks);
 
 		if(PointedR)
-			((GuiExtension) this.minecraft.gui).drawMouseMenuQuad(mx, my);
+			((GuiExtension) this.minecraft.gui).vivecraft$drawMouseMenuQuad(mx, my);
 	}
 
 	@Override

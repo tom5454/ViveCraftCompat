@@ -50,13 +50,13 @@ Fix various compatibility issues with ViveCraft and various other mods.
 [[dependencies.vivecraftcompat]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19,)"
+    versionRange="[1.20,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.vivecraftcompat]]
     modId="vivecraft"
     mandatory=true
-    versionRange="[1.0.1,)"
+    versionRange="[1.1.0,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.vivecraftcompat]]
