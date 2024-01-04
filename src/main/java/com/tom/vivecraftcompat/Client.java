@@ -20,7 +20,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import com.tom.cpl.config.ModConfigFile;
-import com.tom.vivecraftcompat.access.BTN;
 import com.tom.vivecraftcompat.overlay.FloatingGui;
 import com.tom.vivecraftcompat.overlay.OverlayConfig;
 import com.tom.vivecraftcompat.overlay.OverlayManager;
@@ -49,7 +48,7 @@ public class Client {
 		if (VRMode.isVR() && evt.getScreen() instanceof PauseScreen) {
 			for (GuiEventListener l : evt.getListenersList()) {
 				if(l instanceof Button b) {
-					if(b.getMessage().equals(CAM_BTN) && b instanceof BTN btn) {
+					if(b.getMessage().equals(CAM_BTN)) {
 						b = new Button(b.x + b.getWidth() + 5, b.y, 100, 20, OVERLAY_BTN, __ -> {
 							Layer layer = new Layer(i -> new FloatingGui(OverlaySettingsGui::new, i));
 							layer.spawnOverlay(ControllerType.RIGHT);
@@ -64,7 +63,7 @@ public class Client {
 		} else if(evt.getScreen() instanceof GuiMainVRSettings) {
 			for (GuiEventListener l : evt.getListenersList()) {
 				if(l instanceof Button b) {
-					if(ModList.get().isLoaded("firstpersonmod") && b.getMessage().equals(RENDERING_BTN) && b instanceof BTN btn) {
+					if(ModList.get().isLoaded("firstpersonmod") && b.getMessage().equals(RENDERING_BTN)) {
 						b = new Button(b.x, b.y + 126, 150, 20, FP_CONFIG_BTN, __ -> {
 							Minecraft.getInstance().setScreen(FirstPersonModelCore.instance.createConfigScreen(evt.getScreen()));
 						});

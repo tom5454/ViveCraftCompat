@@ -16,7 +16,6 @@
 	  "compat.create.CreateControlsUtilMixin",
 	  "compat.create.CreateRaycastHelperMixin",
 	  "compat.create.CreateValueSettingsScreenMixin",
-	  "compat.create.CreateValueSettingsClientMixin",
 	  "compat.create.CreateContraptionControlsMovingInteractionMixin",
 	  
 	  "compat.toms_storage.TSStorageModClientMixin",
