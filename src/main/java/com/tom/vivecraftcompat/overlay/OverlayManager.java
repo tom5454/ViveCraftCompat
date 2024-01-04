@@ -29,6 +29,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.event.TickEvent.ClientTickEvent;
+import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -250,6 +252,10 @@ public class OverlayManager {
 			}
 		}
 
+		public boolean isMoving() {
+			return startControllerPose != null;
+		}
+
 		public Screen getScreen() {
 			return screen;
 		}
@@ -304,6 +310,12 @@ public class OverlayManager {
 			renderLayer.accept(l);
 			GuiHandler.guiScale = gs;
 		});
+	}
+
+	@SubscribeEvent
+	public static void tick(ClientTickEvent event) {
+		if(!VRMode.isVR() || event.phase == Phase.START)return;
+		forEachLayer(l -> l.screen.tick());
 	}
 
 	@SubscribeEvent

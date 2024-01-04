@@ -310,4 +310,14 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 		}
 		return false;
 	}
+
+	@Override
+	public void tick() {
+		if (gui == null || minecraft == null)return;
+		try {
+			gui.tick();
+		} catch (Throwable e) {
+			onGuiException("Error in tick gui", e, true);
+		}
+	}
 }

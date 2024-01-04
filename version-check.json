@@ -1,22 +1,25 @@
 {
 	"homepage": "https://curseforge.com/minecraft/mc-mods/vivecraft-compat",
 	"promos": {
-		"1.20.1-latest": "1.3.0",
-		"1.19.2-latest": "1.3.0",
-		"1.18.2-latest": "1.3.0"
+		"1.20.1-latest": "1.3.1",
+		"1.19.2-latest": "1.3.1",
+		"1.18.2-latest": "1.3.1"
 	},
 	"1.20.1": {
+		"1.3.1": "Fixed Create brass funnel filters not working\nFixed overlay move buttons breaking the overlay in some cases",
 		"1.3.0": "Updated to ViveCraft 1.1.0",
 		"1.2.0": "Added a vr only gui for elevator contraption controls\nFixed first person body rendering incorrectly",
 		"1.1.0": "1.20 port"
 	},
 	"1.19.2": {
+		"1.3.1": "Fixed Create brass funnel filters not working\nFixed overlay move buttons breaking the overlay in some cases",
 		"1.3.0": "Updated to ViveCraft 1.1.0",
 		"1.2.0": "Added a vr only gui for elevator contraption controls\nFixed first person body rendering incorrectly",
 		"1.1.0": "Ported to ViveCraft 1.0.1 (Closes #1)\nAdded a fix for Create's hold to set options not working in VR\nAdded the option to hide overlays in certain scenarios\nFixed first person body rendering incorrectly while crawling in VR\nFixed clicking through the overlay settings gui",
 		"1.0.0": "First release"
 	},
 	"1.18.2": {
+		"1.3.1": "Fixed Create brass funnel filters not working\nFixed overlay move buttons breaking the overlay in some cases",
 		"1.3.0": "Updated to ViveCraft 1.1.0",
 		"1.2.0": "Ported to 1.18.2\nAdded a vr only gui for elevator contraption controls\nFixed first person body rendering incorrectly"
 	}

@@ -6,8 +6,10 @@ Currently supported mods:
   Fixed Driving trains  
   Fixed track hitboxes breaking  
   Fixed hold to set menus not working  
+  Added a gui to elevator controls
 - [First Person Model](https://www.curseforge.com/minecraft/mc-mods/first-person-model)  
-  Render the first person model in the correct place
+  ~~Render the first person model in the correct place~~ (Fixed in ViveCraft 1.1.0)  
+  Hides the VR hands or allows turning on the Vanilla Hands mode where only the VR hands show, use Double Hands to see both.
 - [Jade](https://www.curseforge.com/minecraft/mc-mods/jade)  
   Register the overlay into Forge's overlay registry.
 - [JourneyMap](https://www.curseforge.com/minecraft/mc-mods/journeymap)  
