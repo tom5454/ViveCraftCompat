@@ -47,6 +47,7 @@ public class OverlaySettingsGui extends Frame {
 	private Button btnAdd, btnDel;
 	private Set<String> allElements;
 	private Slider sliderScale;
+	private Button btnMoveL, btnMoveR;
 
 	public OverlaySettingsGui(IGui gui) {
 		super(gui);
@@ -165,7 +166,7 @@ public class OverlaySettingsGui extends Frame {
 		Panel moveBtns = new Panel(gui);
 		moveBtns.setBounds(new Box(0, 0, rw, 20));
 
-		Button btnMoveL = new Button(gui, "L", () -> {
+		btnMoveL = new Button(gui, "L", () -> {
 			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
 				overlaysBox.getSelected().overlay.layer.startMovingLayer(1);
 			}
@@ -174,7 +175,7 @@ public class OverlaySettingsGui extends Frame {
 		btnMoveL.setBounds(new Box(5, 0, 20, 20));
 		moveBtns.addElement(btnMoveL);
 
-		Button btnMoveR = new Button(gui, "R", () -> {
+		btnMoveR = new Button(gui, "R", () -> {
 			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
 				overlaysBox.getSelected().overlay.layer.startMovingLayer(0);
 			}
@@ -310,6 +311,13 @@ public class OverlaySettingsGui extends Frame {
 			});
 			currentElementsLayout.reflow();
 		}
+	}
+
+	@Override
+	public void tick() {
+		boolean en = overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null && !overlaysBox.getSelected().overlay.layer.isMoving();
+		btnMoveL.setEnabled(en);
+		btnMoveR.setEnabled(en);
 	}
 
 	public class OverlayElement {
