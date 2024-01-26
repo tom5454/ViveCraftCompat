@@ -1,4 +1,4 @@
-package com.tom.vivecraftcompat.mixin.compat.firstpersonmod;
+package com.tom.vivecraftcompat.mixin.compat.firstperson;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider.Context;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 
 import dev.tr7zw.firstperson.FirstPersonModelCore;
+import dev.tr7zw.firstperson.api.FirstPersonAPI;
 
 @Mixin(VRPlayerRenderer.class)
 public class FPMVRPlayerRendererMixin extends PlayerRenderer {
@@ -22,8 +23,8 @@ public class FPMVRPlayerRendererMixin extends PlayerRenderer {
 
 	@Inject(at = @At("RETURN"), method = "setModelProperties")
 	public void onSetModelProperties(AbstractClientPlayer pClientPlayer, CallbackInfo cbi) {
-		if (FirstPersonModelCore.isRenderingPlayer && getModel() instanceof VRPlayerModel_WithArms<AbstractClientPlayer> model) {
-			boolean v = !FirstPersonModelCore.instance.showVanillaHands();
+		if (FirstPersonAPI.isRenderingPlayer() && getModel() instanceof VRPlayerModel_WithArms<AbstractClientPlayer> model) {
+			boolean v = !FirstPersonModelCore.instance.getLogicHandler().showVanillaHands();
 			model.rightHand.visible = v;
 			model.leftHand.visible = v;
 		}
