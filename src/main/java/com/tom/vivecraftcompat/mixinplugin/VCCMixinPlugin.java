@@ -26,7 +26,8 @@ public class VCCMixinPlugin implements IMixinConfigPlugin {
 		String[] sp = mixinClassName.split("\\.");
 		if(sp.length > 5 && sp[4].equals("compat")) {
 			return LoadingModList.get().getModFileById(sp[5]) != null;
-		} else return true;
+		} else if(sp[4].equals("nonvr")) return true;
+		else return LoadingModList.get().getModFileById("vivecraft") != null;
 	}
 
 	@Override

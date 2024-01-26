@@ -8,8 +8,8 @@
   "mixins": [
   ],
   "client": [
-	  "compat.firstpersonmod.FPMVRPlayerRendererMixin",
-	  "compat.firstpersonmod.FPMItemInHandMixin",
+	  "compat.firstperson.FPMVRPlayerRendererMixin",
+	  "compat.firstperson.FPMItemInHandMixin",
 	  
 	  "compat.create.CreateBigOutlinesMixin",
 	  "compat.create.CreateTrackBlockOutlineMixin",

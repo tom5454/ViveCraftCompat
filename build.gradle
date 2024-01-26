@@ -173,6 +173,12 @@ repositories {
 	maven {
    		url = "https://maven.ithundxr.dev/releases"
 	}
+	maven {
+        url 'https://api.modrinth.com/maven'
+        content {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 mixin {
@@ -240,6 +246,12 @@ dependencies {
   	implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.1.1")) {
         jarJar.ranged(it, "[0.1.1,)")
     }
+    
+    compileOnly fg.deobf('maven.modrinth:first-person-model:Ao3IYF3s')
+    
+    compileOnly fg.deobf('curse.maven:cc-tweaked-282001:5005529')
+    compileOnly fg.deobf("com.tom5454.peripherals:TomsPeripherals-120:1.2.0")
+    compileOnly fg.deobf('maven.modrinth:cccbridge:sPKVzUaW')
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
