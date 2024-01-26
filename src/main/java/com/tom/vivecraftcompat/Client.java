@@ -26,7 +26,7 @@ import com.tom.vivecraftcompat.overlay.OverlayManager;
 import com.tom.vivecraftcompat.overlay.OverlayManager.Layer;
 import com.tom.vivecraftcompat.overlay.OverlaySettingsGui;
 
-import dev.tr7zw.firstperson.FirstPersonModelCore;
+import dev.tr7zw.firstperson.config.ConfigScreenProvider;
 
 public class Client {
 	public static ModConfigFile config;
@@ -63,9 +63,9 @@ public class Client {
 		} else if(evt.getScreen() instanceof GuiMainVRSettings) {
 			for (GuiEventListener l : evt.getListenersList()) {
 				if(l instanceof Button b) {
-					if(ModList.get().isLoaded("firstpersonmod") && b.getMessage().equals(RENDERING_BTN)) {
+					if(ModList.get().isLoaded("firstperson") && b.getMessage().equals(RENDERING_BTN)) {
 						b = new Button(b.x, b.y + 126, 150, 20, FP_CONFIG_BTN, __ -> {
-							Minecraft.getInstance().setScreen(FirstPersonModelCore.instance.createConfigScreen(evt.getScreen()));
+							Minecraft.getInstance().setScreen(ConfigScreenProvider.createConfigScreen(evt.getScreen()));
 						});
 						evt.addListener(b);
 						break;

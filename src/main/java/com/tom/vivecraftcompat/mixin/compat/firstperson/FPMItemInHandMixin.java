@@ -1,4 +1,4 @@
-package com.tom.vivecraftcompat.mixin.compat.firstpersonmod;
+package com.tom.vivecraftcompat.mixin.compat.firstperson;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,13 +14,14 @@ import net.minecraft.world.item.ItemStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import dev.tr7zw.firstperson.FirstPersonModelCore;
+import dev.tr7zw.firstperson.api.FirstPersonAPI;
 
 @Mixin(value = ItemInHandRenderer.class, priority = 2000)
 public class FPMItemInHandMixin {
 
 	@Inject(at = @At("HEAD"), method = "vivecraft$vrRenderArmWithItem", remap = false, cancellable = true)
 	private void onVrRenderArmWithItem(AbstractClientPlayer pPlayer, float pPartialTicks, float pPitch, InteractionHand pHand, float pSwingProgress, ItemStack pStack, float pEquippedProgress, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pCombinedLight, CallbackInfo cbi) {
-		if (!FirstPersonModelCore.instance.showVanillaHands() && !FirstPersonModelCore.config.doubleHands) {
+		if (FirstPersonAPI.isEnabled() && !FirstPersonModelCore.instance.getLogicHandler().showVanillaHands() && !FirstPersonModelCore.config.doubleHands) {
 			cbi.cancel();
 		}
 	}
