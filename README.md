@@ -19,7 +19,7 @@ Currently supported mods:
 - [Tom's Simple Storage Mod](https://www.curseforge.com/minecraft/mc-mods/toms-storage)  
   Fix the Wireless Terminal not working correctly.
 
-### The overlay system:
+### The overlay system (Forge Only):
 You can create custom overlays in VR for various vanilla and modded HUD elements.  
 These overlays can display a list of HUD elements that can be locked to your hands or float in the world.  
 ![Overlays image](https://cdn.modrinth.com/data/xnSuzkaS/images/07c118592f3088d15940456f8253572e0421f407.jpeg)

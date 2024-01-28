@@ -39,7 +39,7 @@ public abstract class CreateValueSettingsScreenMixin extends AbstractSimiScreen 
 		return super.mouseClicked(pMouseX, pMouseY, pButton);
 	}
 
-	@Redirect(at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/utility/Lang;translateDirect(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/network/chat/MutableComponent;"), method = "renderWindow", remap = false)
+	@Redirect(at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/utility/Lang;translateDirect(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/network/chat/MutableComponent;", remap = true), method = "renderWindow", remap = false)
 	public MutableComponent replaceReleaseButtonTooltip(String oldKey, Object... oldArgs) {
 		return VRMode.isVR() ? Component.translatable("vivecraftcompat.gui.create.value_settings.click_to_confirm") : Lang.translateDirect(oldKey, oldArgs);
 	}

@@ -7,7 +7,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-import net.minecraftforge.fml.loading.LoadingModList;
+import net.fabricmc.loader.api.FabricLoader;
 
 public class VCCMixinPlugin implements IMixinConfigPlugin {
 
@@ -25,9 +25,9 @@ public class VCCMixinPlugin implements IMixinConfigPlugin {
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
 		String[] sp = mixinClassName.split("\\.");
 		if(sp.length > 5 && sp[4].equals("compat")) {
-			return LoadingModList.get().getModFileById(sp[5]) != null;
+			return FabricLoader.getInstance().isModLoaded(sp[5]);
 		} else if(sp[4].equals("nonvr")) return true;
-		else return LoadingModList.get().getModFileById("vivecraft") != null;
+		else return FabricLoader.getInstance().isModLoaded("vivecraft");
 	}
 
 	@Override

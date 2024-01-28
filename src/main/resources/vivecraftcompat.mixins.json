@@ -4,7 +4,6 @@
   "package": "com.tom.vivecraftcompat.mixin",
   "plugin": "com.tom.vivecraftcompat.mixinplugin.VCCMixinPlugin",
   "compatibilityLevel": "JAVA_17",
-  "refmap": "vivecraftcompat.mixins.refmap.json",
   "mixins": [
   ],
   "client": [
@@ -17,25 +16,11 @@
 	  "compat.create.CreateRaycastHelperMixin",
 	  "compat.create.CreateValueSettingsScreenMixin",
 	  "compat.create.CreateContraptionControlsMovingInteractionMixin",
+	  "compat.create.CreateLocalPlayerMixin",
 	  
 	  "compat.toms_storage.TSStorageModClientMixin",
 	  
-	  "compat.jade.JadeRayTracingMixin",
-	  "compat.jade.JadeClientPlatformProxyMixin",
-	  
-	  "compat.journeymap.JMForgeHudOverlayEventsMixin",
-	  "compat.journeymap.JMEffectMixin",
-	  
-	  "compat.theoneprobe.ClientSetupMixin",
-	  "compat.theoneprobe.OverlayRendererMixin",
-	  
-	  "MinecraftMixin",
-	  "VRRendererMixin",
-	  "VREffectsHelperMixin",
-	  "MCVRMixin",
-	  "VRPlayerMixin",
-	  "ButtonMixin",
-	  "InputSimulatorMixin"
+	  "compat.jade.JadeRayTracingMixin"
   ],
   "injectors": {
     "defaultRequire": 1

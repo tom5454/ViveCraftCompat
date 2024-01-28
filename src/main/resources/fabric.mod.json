@@ -1,0 +1,37 @@
+{
+	"schemaVersion": 1,
+	"id": "vivecraftcompat",
+	"version": "${version}",
+	"name": "ViveCraft Compat",
+	"description": "Fix various compatibility issues with ViveCraft and various other mods.",
+	"authors": [
+		"tom5454"
+	],
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/vivecraft-compat",
+		"sources": "https://github.com/tom5454/ViveCraftCompat",
+		"issues": "https://github.com/tom5454/ViveCraftCompat/issues"
+	},
+	"license": "CC0-1.0",
+	"icon": "icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.tom.vivecraftcompat.ViveCraftCompat"
+		],
+		"client": [
+			"com.tom.vivecraftcompat.Client"
+		]
+	},
+	"mixins": [
+		"vivecraftcompat.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.7.4",
+		"minecraft": ">=1.20 <=1.20.1",
+		"java": ">=17",
+		"fabric-api": "*",
+		"vivecraft": ">=1.1.0",
+		"create": "*"
+	}
+}

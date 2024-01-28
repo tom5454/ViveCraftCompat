@@ -24,7 +24,7 @@ public class CreateContraptionControlsMovingInteractionMixin {
 	private void onElevatorInteraction(BlockPos localPos, AbstractContraptionEntity contraptionEntity,
 			ElevatorContraption contraption, MovementContext ctx, CallbackInfoReturnable<Boolean> cbi) {
 		if (contraptionEntity.level().isClientSide()) {
-			if (VRMode.isVR()) {
+			if (VRMode.isVRStanding()) {
 				if (!(ctx.temporaryData instanceof ElevatorFloorSelection efs)) {
 					cbi.setReturnValue(false);
 					return;
