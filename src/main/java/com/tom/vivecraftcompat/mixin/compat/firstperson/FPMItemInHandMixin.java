@@ -21,7 +21,7 @@ public class FPMItemInHandMixin {
 
 	@Inject(at = @At("HEAD"), method = "vivecraft$vrRenderArmWithItem", remap = false, cancellable = true)
 	private void onVrRenderArmWithItem(AbstractClientPlayer pPlayer, float pPartialTicks, float pPitch, InteractionHand pHand, float pSwingProgress, ItemStack pStack, float pEquippedProgress, PoseStack pMatrixStack, MultiBufferSource pBuffer, int pCombinedLight, CallbackInfo cbi) {
-		if (FirstPersonAPI.isEnabled() && !FirstPersonModelCore.instance.getLogicHandler().showVanillaHands() && !FirstPersonModelCore.config.doubleHands) {
+		if (FirstPersonAPI.isEnabled() && !FirstPersonModelCore.instance.getLogicHandler().showVanillaHands() && !FirstPersonModelCore.instance.getConfig().doubleHands) {
 			cbi.cancel();
 		}
 	}
