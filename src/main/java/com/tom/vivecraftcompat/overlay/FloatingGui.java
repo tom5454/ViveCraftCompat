@@ -150,7 +150,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 				cx = d2;
 				cy = d3;
 			}*/
-			mouseScrolled(d2, d3, 4);
+			mouseScrolled(d2, d3, 0, 4);
 		}
 
 		if (PointedR && GuiHandler.keyScrollDown.consumeClick()) {
@@ -162,7 +162,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 				cx = d2;
 				cy = d3;
 			}*/
-			mouseScrolled(d2, d3, -4);
+			mouseScrolled(d2, d3, 0, -4);
 		}
 
 		if(PointedR && VivecraftVRMod.INSTANCE.keyMenuButton.consumeClick()) {
@@ -206,7 +206,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 	}
 
 	@Override
-	public void renderBackground(GuiGraphics p_283688_) {}
+	public void renderBackground(GuiGraphics p_283688_, int p_296369_, int p_296477_, float p_294317_) {}
 
 	public void drawTexture(int x, int y, int width, int height, float u1, float v1, float u2, float v2, RenderTarget framebuffer) {
 		x += getOffset().x;

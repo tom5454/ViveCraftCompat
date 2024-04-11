@@ -1,6 +1,6 @@
 package com.tom.vivecraftcompat.events;
 
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
 public class VRBindingsEvent extends Event {
 

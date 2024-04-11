@@ -3,7 +3,7 @@ package com.tom.vivecraftcompat.mixin.compat.theoneprobe;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 
-import net.minecraftforge.client.event.RenderGuiOverlayEvent.Pre;
+import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
 
 import mcjty.theoneprobe.rendering.ClientSetup;
 
@@ -17,5 +17,5 @@ public class ClientSetupMixin {
 	 * @author tom5454
 	 * */
 	@Overwrite(remap = false)
-	public void renderGameOverlayEvent(Pre event) {}
+	public void renderGameOverlayEvent(RenderGuiOverlayEvent.Pre event) {}
 }

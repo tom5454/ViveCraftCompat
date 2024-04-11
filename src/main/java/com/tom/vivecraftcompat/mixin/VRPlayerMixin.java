@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.vivecraft.client_vr.gameplay.VRPlayer;
 
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 
 import com.tom.vivecraftcompat.events.VRUpdateControllersEvent;
 
@@ -15,6 +15,6 @@ public class VRPlayerMixin {
 
 	@Inject(at = @At("RETURN"), method = "postPoll", remap = false)
 	public void onPostPoll(CallbackInfo cbi) {
-		MinecraftForge.EVENT_BUS.post(new VRUpdateControllersEvent());
+		NeoForge.EVENT_BUS.post(new VRUpdateControllersEvent());
 	}
 }

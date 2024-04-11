@@ -12,9 +12,8 @@ import org.vivecraft.client_vr.provider.ControllerType;
 import org.vivecraft.client_vr.provider.MCVR;
 
 import net.minecraft.resources.ResourceLocation;
-
-import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
-import net.minecraftforge.client.gui.overlay.NamedGuiOverlay;
+import net.neoforged.neoforge.client.gui.overlay.GuiOverlayManager;
+import net.neoforged.neoforge.client.gui.overlay.NamedGuiOverlay;
 
 import com.tom.cpl.gui.Frame;
 import com.tom.cpl.gui.IGui;

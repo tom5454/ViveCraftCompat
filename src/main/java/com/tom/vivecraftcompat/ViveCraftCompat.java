@@ -3,23 +3,24 @@ package com.tom.vivecraftcompat;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 
-@Mod("vivecraftcompat")
+@Mod(ViveCraftCompat.MODID)
 public class ViveCraftCompat {
+	public static final String MODID = "vivecraftcompat";
 	public static final Logger LOGGER = LogManager.getLogger();
 
-	public ViveCraftCompat() {
+	public ViveCraftCompat(IEventBus bus) {
 		LOGGER.info("Vive Craft Compat loaded");
 
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+		bus.addListener(this::doClientStuff);
 
 		if(FMLEnvironment.dist == Dist.CLIENT) {
-			Client.preInit();
+			Client.preInit(bus);
 		}
 	}
 

@@ -9,13 +9,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.GuiOverlayManager;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.client.gui.overlay.NamedGuiOverlay;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.gui.overlay.GuiOverlayManager;
+import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
+import net.neoforged.neoforge.client.gui.overlay.NamedGuiOverlay;
+import net.neoforged.neoforge.common.NeoForge;
 
 import com.mojang.logging.LogUtils;
 
@@ -46,7 +45,7 @@ public class HudOverlayScreen extends Screen {
 				try {
 					IGuiOverlay overlay = entry.overlay();
 					if (pre(entry, poseStack)) return;
-					overlay.render((ForgeGui) minecraft.gui, poseStack, pPartialTick, screenWidth, screenHeight);
+					overlay.render((ExtendedGui) minecraft.gui, poseStack, pPartialTick, screenWidth, screenHeight);
 					post(entry, poseStack);
 				} catch (Exception e) {
 					LOGGER.error("Error rendering overlay '{}'", entry.id(), e);
@@ -62,11 +61,11 @@ public class HudOverlayScreen extends Screen {
 	}
 
 	private boolean pre(NamedGuiOverlay overlay, GuiGraphics poseStack) {
-		return MinecraftForge.EVENT_BUS.post(new RenderGuiOverlayEvent.Pre(minecraft.getWindow(), poseStack, minecraft.getFrameTime(), overlay));
+		return NeoForge.EVENT_BUS.post(new RenderGuiOverlayEvent.Pre(minecraft.getWindow(), poseStack, minecraft.getFrameTime(), overlay)).isCanceled();
 	}
 
 	private void post(NamedGuiOverlay overlay, GuiGraphics poseStack) {
-		MinecraftForge.EVENT_BUS.post(new RenderGuiOverlayEvent.Post(minecraft.getWindow(), poseStack, minecraft.getFrameTime(), overlay));
+		NeoForge.EVENT_BUS.post(new RenderGuiOverlayEvent.Post(minecraft.getWindow(), poseStack, minecraft.getFrameTime(), overlay));
 	}
 
 	@Override

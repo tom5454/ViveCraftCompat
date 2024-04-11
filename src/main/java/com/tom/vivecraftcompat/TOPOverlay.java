@@ -2,13 +2,13 @@ package com.tom.vivecraftcompat;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 
 import mcjty.theoneprobe.api.ProbeMode;
 import mcjty.theoneprobe.config.Config;
@@ -18,10 +18,10 @@ import mcjty.theoneprobe.rendering.OverlayRenderer;
 
 public class TOPOverlay {
 	public static void register(RegisterGuiOverlaysEvent event) {
-		event.registerAboveAll("theoneprobe", TOPOverlay::render);
+		event.registerAboveAll(new ResourceLocation(ViveCraftCompat.MODID, "theoneprobe"), TOPOverlay::render);
 	}
 
-	public static void render(ForgeGui gui, GuiGraphics poseStack, float partialTick, int screenWidth, int screenHeight) {
+	public static void render(ExtendedGui gui, GuiGraphics poseStack, float partialTick, int screenWidth, int screenHeight) {
 		if (Config.holdKeyToMakeVisible.get()) {
 			if (!KeyBindings.toggleVisible.isDown()) {
 				return;

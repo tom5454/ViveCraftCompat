@@ -10,14 +10,13 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.screens.PauseScreen;
 import net.minecraft.network.chat.Component;
-
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.ScreenEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLPaths;
+import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 import com.tom.cpl.config.ModConfigFile;
 import com.tom.vivecraftcompat.overlay.FloatingGui;
@@ -36,8 +35,8 @@ public class Client {
 	private static final Component FP_CONFIG_BTN = Component.translatable("vivecraftcompat.gui.firstpersonmod.config");
 
 	public static void init() {
-		MinecraftForge.EVENT_BUS.register(OverlayManager.class);
-		MinecraftForge.EVENT_BUS.register(Client.class);
+		NeoForge.EVENT_BUS.register(OverlayManager.class);
+		NeoForge.EVENT_BUS.register(Client.class);
 
 		config = new ModConfigFile(new File(FMLPaths.CONFIGDIR.get().toFile(), "vivecraftcompat.json"));
 		OverlayConfig.loadOverlays();
@@ -75,8 +74,8 @@ public class Client {
 		}
 	}
 
-	public static void preInit() {
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(Client::registerOverlays);
+	public static void preInit(IEventBus bus) {
+		bus.addListener(Client::registerOverlays);
 	}
 
 	public static void registerOverlays(RegisterGuiOverlaysEvent event) {

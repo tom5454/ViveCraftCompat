@@ -1,19 +1,19 @@
 package com.tom.vivecraftcompat;
 
 import net.minecraft.client.gui.GuiGraphics;
-
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
+import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
 
 import journeymap.client.log.JMLogger;
 import journeymap.client.ui.UIManager;
 
 public class JourneyMapOverlay {
 	public static void register(RegisterGuiOverlaysEvent event) {
-		event.registerAboveAll("journeymap", JourneyMapOverlay::render);
+		event.registerAboveAll(new ResourceLocation(ViveCraftCompat.MODID, "journeymap"), JourneyMapOverlay::render);
 	}
 
-	public static void render(ForgeGui gui, GuiGraphics poseStack, float partialTick, int screenWidth, int screenHeight) {
+	public static void render(ExtendedGui gui, GuiGraphics poseStack, float partialTick, int screenWidth, int screenHeight) {
 		try {
 			UIManager.INSTANCE.drawMiniMap(poseStack);
 		} catch (Throwable var3) {

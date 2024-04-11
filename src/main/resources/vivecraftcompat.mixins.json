@@ -4,19 +4,11 @@
   "package": "com.tom.vivecraftcompat.mixin",
   "plugin": "com.tom.vivecraftcompat.mixinplugin.VCCMixinPlugin",
   "compatibilityLevel": "JAVA_17",
-  "refmap": "vivecraftcompat.mixins.refmap.json",
   "mixins": [
   ],
   "client": [
 	  "compat.firstperson.FPMVRPlayerRendererMixin",
 	  "compat.firstperson.FPMItemInHandMixin",
-	  
-	  "compat.create.CreateBigOutlinesMixin",
-	  "compat.create.CreateTrackBlockOutlineMixin",
-	  "compat.create.CreateControlsUtilMixin",
-	  "compat.create.CreateRaycastHelperMixin",
-	  "compat.create.CreateValueSettingsScreenMixin",
-	  "compat.create.CreateContraptionControlsMovingInteractionMixin",
 	  
 	  "compat.toms_storage.TSStorageModClientMixin",
 	  
