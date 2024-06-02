@@ -31,7 +31,6 @@
 		"minecraft": ">=1.20 <=1.20.1",
 		"java": ">=17",
 		"fabric-api": "*",
-		"vivecraft": ">=1.1.0",
-		"create": "*"
+		"vivecraft": ">=1.1.0"
 	}
 }
