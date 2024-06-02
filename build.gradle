@@ -162,10 +162,10 @@ dependencies {
   	//implementation fg.deobf('curse.maven:oculus-581495:4578741')
   	
   	compileOnly 'com.github.Virtuoel:Pehkui:3.8.0-1.20.4-neoforge'
-    compileOnly 'curse.maven:vivecraft-667903:5144688'
+    compileOnly 'maven.modrinth:vivecraft:1.20.4-1.1.9-neoforge'
     //implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4675789')
   	
-  	implementation "com.tom5454.cpm:CustomPlayerModels-1.20.4:0.6.16b"
+  	implementation "com.tom5454.cpm:CustomPlayerModels-1.20.4:0.6.16e"
   	implementation ("com.tom5454.toms_storage:TomsStorage-1204:1.6.11") {
   		transitive = false
   	}
@@ -189,7 +189,7 @@ dependencies {
     }
     compileOnly("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.2-beta.5")
     
-    implementation 'maven.modrinth:first-person-model:pg6ihT1a'
+    implementation 'maven.modrinth:first-person-model:cOyIi8x5'
     
     /*compileOnly fg.deobf('curse.maven:cc-tweaked-282001:5005529')
     compileOnly fg.deobf("com.tom5454.peripherals:TomsPeripherals-120:1.2.0")
