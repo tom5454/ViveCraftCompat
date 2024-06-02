@@ -221,11 +221,11 @@ dependencies {
   	//implementation fg.deobf('curse.maven:oculus-581495:4578741')
   	
   	implementation fg.deobf("com.github.Virtuoel:Pehkui:3.7.7-1.20.1-forge")
-    implementation fg.deobf('local:vivecraft:1.20.1-1.1.5-forge')
+    implementation fg.deobf('maven.modrinth:vivecraft:1.20.1-1.1.9-forge')
     //implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4675789')
   	
-  	implementation fg.deobf("com.tom5454.cpm:CustomPlayerModels-1.20:0.6.12a")
-  	implementation fg.deobf("com.tom5454.toms_storage:TomsStorage-120:1.6.4")
+  	implementation fg.deobf("com.tom5454.cpm:CustomPlayerModels-1.20:0.6.16c")
+  	implementation fg.deobf("com.tom5454.toms_storage:TomsStorage-120:1.6.6")
   	
   	implementation fg.deobf("local:vrapi:3.0.6-1.20.1-forge")
   	implementation fg.deobf("local:immersivemc:1.4.0-beta1.1-1.20.1-forge")
@@ -246,7 +246,7 @@ dependencies {
         jarJar.ranged(it, "[0.1.1,)")
     }
     
-    implementation fg.deobf('maven.modrinth:first-person-model:MtWCrDLD')
+    implementation fg.deobf('maven.modrinth:first-person-model:o7MvYy4x')
     
     /*compileOnly fg.deobf('curse.maven:cc-tweaked-282001:5005529')
     compileOnly fg.deobf("com.tom5454.peripherals:TomsPeripherals-120:1.2.0")
