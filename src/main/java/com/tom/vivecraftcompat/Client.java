@@ -14,7 +14,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLPaths;
-import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.common.NeoForge;
 
@@ -24,8 +24,6 @@ import com.tom.vivecraftcompat.overlay.OverlayConfig;
 import com.tom.vivecraftcompat.overlay.OverlayManager;
 import com.tom.vivecraftcompat.overlay.OverlayManager.Layer;
 import com.tom.vivecraftcompat.overlay.OverlaySettingsGui;
-
-import dev.tr7zw.firstperson.config.ConfigScreenProvider;
 
 public class Client {
 	public static ModConfigFile config;
@@ -60,7 +58,7 @@ public class Client {
 				}
 			}
 		} else if(evt.getScreen() instanceof GuiMainVRSettings) {
-			for (GuiEventListener l : evt.getListenersList()) {
+			/*for (GuiEventListener l : evt.getListenersList()) {
 				if(l instanceof Button b) {
 					if(ModList.get().isLoaded("firstperson") && b.getMessage().equals(RENDERING_BTN)) {
 						b = Button.builder(FP_CONFIG_BTN, __ -> {
@@ -70,7 +68,7 @@ public class Client {
 						break;
 					}
 				}
-			}
+			}*/
 		}
 	}
 
@@ -78,7 +76,7 @@ public class Client {
 		bus.addListener(Client::registerOverlays);
 	}
 
-	public static void registerOverlays(RegisterGuiOverlaysEvent event) {
+	public static void registerOverlays(RegisterGuiLayersEvent event) {
 		if(ModList.get().isLoaded("jade"))JadeOverlay.register(event);
 		if(ModList.get().isLoaded("journeymap"))JourneyMapOverlay.register(event);
 		if(ModList.get().isLoaded("theoneprobe"))TOPOverlay.register(event);

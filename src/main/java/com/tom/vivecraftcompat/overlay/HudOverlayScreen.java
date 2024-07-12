@@ -9,11 +9,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
-import net.neoforged.neoforge.client.gui.overlay.GuiOverlayManager;
-import net.neoforged.neoforge.client.gui.overlay.IGuiOverlay;
-import net.neoforged.neoforge.client.gui.overlay.NamedGuiOverlay;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
+import net.neoforged.neoforge.client.gui.GuiLayerManager.NamedLayer;
 import net.neoforged.neoforge.common.NeoForge;
 
 import com.mojang.logging.LogUtils;
@@ -35,20 +32,19 @@ public class HudOverlayScreen extends Screen {
 	}
 
 	@Override
-	public void render(GuiGraphics poseStack, int pMouseX, int pMouseY, float pPartialTick) {
+	public void render(GuiGraphics poseStack, int pMouseX, int pMouseY, float pt) {
 		if(this.minecraft.player == null || this.minecraft.gameMode == null || this.minecraft.level == null || !isEnabled())return;
-		int screenWidth = this.minecraft.getWindow().getGuiScaledWidth();
-		int screenHeight = this.minecraft.getWindow().getGuiScaledHeight();
+		var dt = minecraft.getTimer();
 		overlays.forEach(id -> {
-			NamedGuiOverlay entry = GuiOverlayManager.findOverlay(id);
+			NamedLayer entry = OverlayAccess.getLayerMap().get(id);
 			if(entry != null) {
 				try {
-					IGuiOverlay overlay = entry.overlay();
-					if (pre(entry, poseStack)) return;
-					overlay.render((ExtendedGui) minecraft.gui, poseStack, pPartialTick, screenWidth, screenHeight);
-					post(entry, poseStack);
+					if (!NeoForge.EVENT_BUS.post(new RenderGuiLayerEvent.Pre(poseStack, dt, entry.name(), entry.layer())).isCanceled()) {
+						entry.layer().render(poseStack, dt);
+						NeoForge.EVENT_BUS.post(new RenderGuiLayerEvent.Post(poseStack, dt, entry.name(), entry.layer()));
+					}
 				} catch (Exception e) {
-					LOGGER.error("Error rendering overlay '{}'", entry.id(), e);
+					LOGGER.error("Error rendering overlay '{}'", entry.name(), e);
 				}
 			}
 		});
@@ -58,14 +54,6 @@ public class HudOverlayScreen extends Screen {
 			poseStack.fill(width - 1, 0, width, height, 0xFFFF0000);
 			poseStack.fill(0, height - 1, width, height, 0xFFFF0000);
 		}
-	}
-
-	private boolean pre(NamedGuiOverlay overlay, GuiGraphics poseStack) {
-		return NeoForge.EVENT_BUS.post(new RenderGuiOverlayEvent.Pre(minecraft.getWindow(), poseStack, minecraft.getFrameTime(), overlay)).isCanceled();
-	}
-
-	private void post(NamedGuiOverlay overlay, GuiGraphics poseStack) {
-		NeoForge.EVENT_BUS.post(new RenderGuiOverlayEvent.Post(minecraft.getWindow(), poseStack, minecraft.getFrameTime(), overlay));
 	}
 
 	@Override

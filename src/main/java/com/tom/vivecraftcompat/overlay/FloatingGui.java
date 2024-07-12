@@ -220,15 +220,14 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE_MINUS_DST_ALPHA,
 				GlStateManager.DestFactor.ONE);
 		Tesselator tessellator = Tesselator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.getBuilder();
-		bufferbuilder.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+		BufferBuilder bufferbuilder = tessellator.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 		float bo = 0;
 		org.joml.Matrix4f matrix = graphics.pose().last().pose();
-		bufferbuilder.vertex(matrix, x, y + height, bo).uv(u1, v2).endVertex();
-		bufferbuilder.vertex(matrix, x + width, y + height, bo).uv(u2, v2).endVertex();
-		bufferbuilder.vertex(matrix, x + width, y, bo).uv(u2, v1).endVertex();
-		bufferbuilder.vertex(matrix, x, y, bo).uv(u1, v1).endVertex();
-		BufferUploader.drawWithShader(bufferbuilder.end());
+		bufferbuilder.addVertex(matrix, x, y + height, bo).setUv(u1, v2);
+		bufferbuilder.addVertex(matrix, x + width, y + height, bo).setUv(u2, v2);
+		bufferbuilder.addVertex(matrix, x + width, y, bo).setUv(u2, v1);
+		bufferbuilder.addVertex(matrix, x, y, bo).setUv(u1, v1);
+		BufferUploader.drawWithShader(bufferbuilder.build());
 		RenderSystem.disableBlend();
 	}
 

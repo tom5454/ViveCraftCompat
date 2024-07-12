@@ -1,5 +1,6 @@
 package com.tom.vivecraftcompat;
 
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -7,8 +8,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 
 import mcjty.theoneprobe.api.ProbeMode;
 import mcjty.theoneprobe.config.Config;
@@ -17,11 +17,14 @@ import mcjty.theoneprobe.keys.KeyBindings;
 import mcjty.theoneprobe.rendering.OverlayRenderer;
 
 public class TOPOverlay {
-	public static void register(RegisterGuiOverlaysEvent event) {
-		event.registerAboveAll(new ResourceLocation(ViveCraftCompat.MODID, "theoneprobe"), TOPOverlay::render);
+	public static final ResourceLocation ID = ResourceLocation.tryBuild(ViveCraftCompat.MODID, "theoneprobe");
+
+	public static void register(RegisterGuiLayersEvent event) {
+		event.registerAboveAll(ID, TOPOverlay::render);
 	}
 
-	public static void render(ExtendedGui gui, GuiGraphics poseStack, float partialTick, int screenWidth, int screenHeight) {
+	public static void render(GuiGraphics poseStack, DeltaTracker p_348559_) {
+		float partialTick = p_348559_.getGameTimeDeltaPartialTick(false);
 		if (Config.holdKeyToMakeVisible.get()) {
 			if (!KeyBindings.toggleVisible.isDown()) {
 				return;

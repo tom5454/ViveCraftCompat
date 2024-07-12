@@ -7,14 +7,9 @@
   "mixins": [
   ],
   "client": [
-	  "compat.firstperson.FPMVRPlayerRendererMixin",
-	  "compat.firstperson.FPMItemInHandMixin",
-	  
-	  "compat.toms_storage.TSStorageModClientMixin",
-	  
 	  "compat.jade.JadeClientPlatformProxyMixin",
 	  
-	  "compat.journeymap.JMForgeHudOverlayEventsMixin",
+	  "compat.journeymap.JMNeoForgeHudOverlayEventsMixin",
 	  "compat.journeymap.JMEffectMixin",
 	  
 	  "compat.theoneprobe.ClientSetupMixin",

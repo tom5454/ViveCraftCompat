@@ -19,7 +19,7 @@ public class JadeClientPlatformProxyMixin {
 	 * @author tom5454
 	 * */
 	@Overwrite(remap = false)
-	public static void onRenderTick(GuiGraphics guiGraphics) {
+	public static void onRenderTick(final GuiGraphics guiGraphics, final float tickDelta) {
 		bossbarShown = false;
 	}
 }

@@ -1,23 +1,20 @@
 package com.tom.vivecraftcompat;
 
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.event.RegisterGuiOverlaysEvent;
-import net.neoforged.neoforge.client.gui.overlay.ExtendedGui;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 
-import journeymap.client.log.JMLogger;
-import journeymap.client.ui.UIManager;
+import journeymap.client.event.handlers.HudOverlayHandler;
 
 public class JourneyMapOverlay {
-	public static void register(RegisterGuiOverlaysEvent event) {
-		event.registerAboveAll(new ResourceLocation(ViveCraftCompat.MODID, "journeymap"), JourneyMapOverlay::render);
+	public static final ResourceLocation ID = ResourceLocation.tryBuild(ViveCraftCompat.MODID, "journeymap");
+
+	public static void register(RegisterGuiLayersEvent event) {
+		event.registerAboveAll(ID, JourneyMapOverlay::render);
 	}
 
-	public static void render(ExtendedGui gui, GuiGraphics poseStack, float partialTick, int screenWidth, int screenHeight) {
-		try {
-			UIManager.INSTANCE.drawMiniMap(poseStack);
-		} catch (Throwable var3) {
-			JMLogger.throwLogOnce(var3.toString(), var3);
-		}
+	public static void render(GuiGraphics gr, DeltaTracker p_348559_) {
+		HudOverlayHandler.getInstance().onRenderOverlay(gr);
 	}
 }

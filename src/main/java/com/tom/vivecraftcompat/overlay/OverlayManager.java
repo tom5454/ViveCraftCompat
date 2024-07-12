@@ -21,6 +21,7 @@ import org.vivecraft.common.utils.math.Matrix4f;
 import org.vivecraft.common.utils.math.Quaternion;
 import org.vivecraft.common.utils.math.Vector3;
 
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -29,9 +30,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.RenderGuiOverlayEvent;
-import net.neoforged.neoforge.event.TickEvent.ClientTickEvent;
-import net.neoforged.neoforge.event.TickEvent.Phase;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
+import net.neoforged.neoforge.client.event.RenderGuiLayerEvent;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -52,7 +52,7 @@ public class OverlayManager {
 		screens.forEach(Layer::reinit);
 	}
 
-	public static void drawLayers(float partial) {
+	public static void drawLayers(DeltaTracker.Timer partial) {
 		if(!VRMode.isVR() || screens.isEmpty())return;
 		MC mc = (MC) minecraft;
 		RenderTarget bak = minecraft.getMainRenderTarget();
@@ -70,9 +70,9 @@ public class OverlayManager {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public static void overlayPre(RenderGuiOverlayEvent.Pre event) {
+	public static void overlayPre(RenderGuiLayerEvent.Pre event) {
 		if(overlayRendering || !VRMode.isVR())return;
-		ResourceLocation rl = event.getOverlay().id();
+		ResourceLocation rl = event.getName();
 		if(isOverlayDetached(rl)) {
 			event.setCanceled(true);
 		}
@@ -312,8 +312,8 @@ public class OverlayManager {
 	}
 
 	@SubscribeEvent
-	public static void tick(ClientTickEvent event) {
-		if(!VRMode.isVR() || event.phase == Phase.START)return;
+	public static void tick(ClientTickEvent.Post event) {
+		if(!VRMode.isVR())return;
 		forEachLayer(l -> l.screen.tick());
 	}
 

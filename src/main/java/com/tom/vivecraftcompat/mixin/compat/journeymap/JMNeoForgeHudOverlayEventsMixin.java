@@ -5,10 +5,10 @@ import org.spongepowered.asm.mixin.Overwrite;
 
 import net.neoforged.neoforge.client.event.RenderGuiEvent;
 
-import journeymap.client.event.forge.ForgeHudOverlayEvents;
+import journeymap.client.event.NeoForgeHudOverlayEvents;
 
-@Mixin(ForgeHudOverlayEvents.class)
-public class JMForgeHudOverlayEventsMixin {
+@Mixin(NeoForgeHudOverlayEvents.class)
+public class JMNeoForgeHudOverlayEventsMixin {
 
 	/**
 	 * Disable original overlay rendering code
@@ -17,5 +17,5 @@ public class JMForgeHudOverlayEventsMixin {
 	 * @author tom5454
 	 * */
 	@Overwrite(remap = false)
-	public void preOverlay(RenderGuiEvent.Pre event) {}
+	public void postGuiOverlay(final RenderGuiEvent.Post event) {}
 }

@@ -12,8 +12,7 @@ import org.vivecraft.client_vr.provider.ControllerType;
 import org.vivecraft.client_vr.provider.MCVR;
 
 import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.client.gui.overlay.GuiOverlayManager;
-import net.neoforged.neoforge.client.gui.overlay.NamedGuiOverlay;
+import net.neoforged.neoforge.client.gui.GuiLayerManager.NamedLayer;
 
 import com.tom.cpl.gui.Frame;
 import com.tom.cpl.gui.IGui;
@@ -62,7 +61,7 @@ public class OverlaySettingsGui extends Frame {
 
 	@Override
 	public void initFrame(int width, int height) {
-		allElements = GuiOverlayManager.getOverlays().stream().map(NamedGuiOverlay::id).collect(Collectors.toSet());
+		allElements = OverlayAccess.getLayers().stream().map(NamedLayer::name).collect(Collectors.toSet());
 
 		overlays = new ArrayList<>();
 		overlays.add(new OverlayElement(null));
