@@ -12,20 +12,17 @@
 	  
 	  "compat.toms_storage.TSStorageModClientMixin",
 	  
-	  "compat.jade.JadeRayTracingMixin",
 	  "compat.jade.JadeClientPlatformProxyMixin",
 	  
 	  "compat.journeymap.JMForgeHudOverlayEventsMixin",
 	  "compat.journeymap.JMEffectMixin",
 	  
 	  "compat.theoneprobe.ClientSetupMixin",
-	  "compat.theoneprobe.OverlayRendererMixin",
 	  
 	  "MinecraftMixin",
 	  "VRRendererMixin",
 	  "VREffectsHelperMixin",
 	  "MCVRMixin",
-	  "VRPlayerMixin",
 	  "ButtonMixin",
 	  "InputSimulatorMixin"
   ],

@@ -162,7 +162,7 @@ dependencies {
   	//implementation fg.deobf('curse.maven:oculus-581495:4578741')
   	
   	compileOnly 'com.github.Virtuoel:Pehkui:3.8.0-1.20.4-neoforge'
-    compileOnly 'maven.modrinth:vivecraft:1.20.4-1.1.9-neoforge'
+    compileOnly 'maven.modrinth:vivecraft:1.20.4-1.1.11-neoforge'
     //implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4675789')
   	
   	implementation "com.tom5454.cpm:CustomPlayerModels-1.20.4:0.6.16e"
@@ -184,10 +184,10 @@ dependencies {
   	
   	//implementation fg.deobf("dev.architectury:architectury-forge:9.1.12")
   	
-  	implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.1.2-beta.5")) {
+  	/*implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.1.2-beta.5")) {
         jarJar.ranged(it, "[0.1.2-beta.5,)")
     }
-    compileOnly("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.2-beta.5")
+    compileOnly("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.2-beta.5")*/
     
     implementation 'maven.modrinth:first-person-model:cOyIi8x5'
     
