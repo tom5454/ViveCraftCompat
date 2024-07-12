@@ -10,10 +10,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Timer;
 
-import com.bawnorton.mixinsquared.TargetHandler;
+import net.minecraftforge.common.MinecraftForge;
+
 import com.mojang.blaze3d.pipeline.RenderTarget;
 
+import com.tom.vivecraftcompat.VRMode;
 import com.tom.vivecraftcompat.access.MC;
+import com.tom.vivecraftcompat.events.VRUpdateControllersEvent;
 import com.tom.vivecraftcompat.overlay.OverlayManager;
 
 @Mixin(value = Minecraft.class, priority = 2000)
@@ -29,10 +32,14 @@ public class MinecraftMixin implements MC {
 		this.mainRenderTarget = mainRenderTarget;
 	}
 
-	@TargetHandler(mixin = "org.vivecraft.mixin.client_vr.MinecraftVRMixin", name = "vivecraft$renderVRPasses")
-	@Inject(at = @At(value = "INVOKE", target = "Lorg/vivecraft/client_vr/gameplay/screenhandlers/RadialHandler;isShowing()Z", remap = false), method = "@MixinSquared:Handler", remap = false)
-	public void renderHudLayers(boolean renderLevel, CallbackInfo ci, long nanoTime, CallbackInfo cbi) {
-		float f = this.pause ? this.pausePartialTick : this.timer.partialTick;
-		OverlayManager.drawLayers(f);
+	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraftforge/event/ForgeEventFactory;onRenderTickEnd(F)V", shift = At.Shift.AFTER), method = "runTick")
+	public void renderOverlayPasses(boolean renderLevel, CallbackInfo ci) {
+		OverlayManager.drawLayers(this.pause ? this.pausePartialTick : this.timer.partialTick);
+	}
+
+	@Inject(at = @At("HEAD"), method = "runTick(Z)V")
+	public void updateVRControllers(boolean tick, CallbackInfo callback) {
+		if (VRMode.isVR())
+			MinecraftForge.EVENT_BUS.post(new VRUpdateControllersEvent());
 	}
 }
