@@ -68,6 +68,7 @@ public class OverlayManager {
 		}
 		overlayRendering = false;
 		mc.mc$setMainRenderTarget(bak);
+		bak.bindWrite(true);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
