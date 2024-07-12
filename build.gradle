@@ -193,7 +193,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.19.2-43.2.11'
     
     // Mixin annotation processor - generates the refmap
-    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.1"))
+    //implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.1"))
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
@@ -217,11 +217,12 @@ dependencies {
   	implementation fg.deobf('curse.maven:rubidium-574856:4568727')
   	implementation fg.deobf('curse.maven:oculus-581495:4578731')
   	
-  	implementation fg.deobf("com.github.Virtuoel:Pehkui:3.7.0-1.19.2-forge")
-    implementation fg.deobf('local:vivecraft:1.19.2-1.1.5-forge')
+  	implementation fg.deobf("com.github.Virtuoel:Pehkui:3.8.2-1.19.2-forge")
+    //implementation fg.deobf('local:vivecraft:1.19.2-1.1.5-forge')
+    implementation fg.deobf('maven.modrinth:vivecraft:1.19.2-1.1.11-forge')
     implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4631169')
   	
-  	implementation fg.deobf("com.tom5454.cpm:CustomPlayerModels-1.19:0.6.14b")
+  	implementation fg.deobf("com.tom5454.cpm:CustomPlayerModels-1.19:0.6.17a")
   	implementation fg.deobf("com.tom5454.toms_storage:TomsStorage-119:1.5.9")
   	
   	implementation fg.deobf("local:vrapi:3.0.6-1.19.2-forge")
@@ -238,9 +239,9 @@ dependencies {
   	
   	implementation fg.deobf("dev.architectury:architectury-forge:6.4.62")
   	
-  	implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.1.1")) {
+  	/*implementation(jarJar("com.github.bawnorton.mixinsquared:mixinsquared-forge:0.1.1")) {
         jarJar.ranged(it, "[0.1.1,)")
-    }
+    }*/
     
     compileOnly fg.deobf('maven.modrinth:first-person-model:XFRHpwhn')
     
