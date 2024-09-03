@@ -38,8 +38,17 @@ public class HudOverlayScreen extends Screen {
 	@Override
 	public void render(GuiGraphics poseStack, int pMouseX, int pMouseY, float pPartialTick) {
 		if(this.minecraft.player == null || this.minecraft.gameMode == null || this.minecraft.level == null || !isEnabled())return;
+		if(outline) {
+			poseStack.fill(0, 0, width, 1, 0xFFFF0000);
+			poseStack.fill(0, 0, 1, height, 0xFFFF0000);
+			poseStack.fill(width - 1, 0, width, height, 0xFFFF0000);
+			poseStack.fill(0, height - 1, width, height, 0xFFFF0000);
+			poseStack.flush();
+		}
 		int screenWidth = this.minecraft.getWindow().getGuiScaledWidth();
 		int screenHeight = this.minecraft.getWindow().getGuiScaledHeight();
+		poseStack.pose().pushPose();
+		poseStack.pose().translate(0, 0, 1);
 		overlays.forEach(id -> {
 			NamedGuiOverlay entry = GuiOverlayManager.findOverlay(id);
 			if(entry != null) {
@@ -53,12 +62,7 @@ public class HudOverlayScreen extends Screen {
 				}
 			}
 		});
-		if(outline) {
-			poseStack.fill(0, 0, width, 1, 0xFFFF0000);
-			poseStack.fill(0, 0, 1, height, 0xFFFF0000);
-			poseStack.fill(width - 1, 0, width, height, 0xFFFF0000);
-			poseStack.fill(0, height - 1, width, height, 0xFFFF0000);
-		}
+		poseStack.pose().popPose();
 	}
 
 	private boolean pre(NamedGuiOverlay overlay, GuiGraphics poseStack) {

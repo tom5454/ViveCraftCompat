@@ -144,7 +144,7 @@ public class OverlayManager {
 			if(framebuffer != null)framebuffer.destroyBuffers();
 			framebuffer = null;
 			if(VRMode.isVR()) {
-				framebuffer = new VRTextureTarget("HudScreen", GuiHandler.guiWidth, GuiHandler.guiHeight, true, false, -1, false, true, false);
+				framebuffer = new VRTextureTarget("HudScreen", GuiHandler.guiWidth, GuiHandler.guiHeight, true, false, -1, true, true, true);
 				int l2 = minecraft.getWindow().getGuiScaledWidth();
 				int j3 = minecraft.getWindow().getGuiScaledHeight();
 				screen.init(minecraft, l2, j3);
