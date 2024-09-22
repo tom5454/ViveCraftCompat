@@ -15,7 +15,7 @@ import com.tom.vivecraftcompat.VRMode;
 public class TSStorageModClientMixin {
 	private static final ClientDataHolderVR DATA_HOLDER = ClientDataHolderVR.getInstance();
 
-	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;pick(DFZ)Lnet/minecraft/world/phys/HitResult;", remap = true), method = "lambda$onInitializeClient$4", remap = false)
+	@Redirect(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;pick(DFZ)Lnet/minecraft/world/phys/HitResult;", remap = true), method = "lambda$onInitializeClient$3", remap = false)
 	private static HitResult pickBlock(Player player, double pHitDistance, float pPartialTicks, boolean pHitFluids) {
 		if (VRMode.isVRStanding())
 			return DATA_HOLDER.vrPlayer.rayTraceBlocksVR(DATA_HOLDER.vrPlayer.vrdata_world_render, 0, pHitDistance, pHitFluids);
