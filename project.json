@@ -1,0 +1,46 @@
+{
+  "type": "forge",
+  "name": "vivecraftcompat-1.18",
+  "mcVer": "1.18",
+  "verId": "1.18",
+  "display": "ViveCraft Compat 1.18",
+  "git": "ViveCraftCompat-118",
+  "subver": [
+	"1.18.2"
+  ],
+  "j17": true,
+  "depProjects": [
+    {
+      "slug": "vivecraft",
+      "type": "requiredDependency"
+    },
+    {
+      "slug": "custom-player-models",
+      "type": "requiredDependency"
+    },
+    {
+      "slug": "create",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "first-person-model",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "jade",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "the-one-probe",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "journeymap",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "toms-storage",
+      "type": "optionalDependency"
+    }
+  ]
+}
