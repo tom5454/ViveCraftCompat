@@ -63,5 +63,7 @@
 	"overlay.minecraft.mount_health": "Mount Health",
 	"overlay.minecraft.boss_event_progress": "Bossbar",
 	"overlay.minecraft.spyglass": "Spyglass Overlay",
-	"overlay.minecraft.title_text": "Title text"
+	"overlay.minecraft.title_text": "Title text",
+	"overlay.minecraft.debug_screen": "Debug Screen (F3)",
+	"overlay.minecraft.demo_overlay": "Demo Overlay"
 }

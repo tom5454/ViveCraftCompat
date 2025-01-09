@@ -4,7 +4,7 @@
   "mcVer": "1.20",
   "verId": "1.20.4",
   "display": "[NeoForge] ViveCraft Compat 1.20.4",
-  "git": "ViveCraftCompat",
+  "onGit": true,
   "subver": [
 	"1.20.4"
   ],
