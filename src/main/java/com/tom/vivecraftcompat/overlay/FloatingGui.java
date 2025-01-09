@@ -1,15 +1,17 @@
 package com.tom.vivecraftcompat.overlay;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.vivecraft.client.VivecraftVRMod;
+import org.vivecraft.client_vr.ClientDataHolderVR;
 import org.vivecraft.client_vr.gameplay.screenhandlers.GuiHandler;
-import org.vivecraft.client_vr.render.helpers.RenderHelper;
 
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 
@@ -21,6 +23,7 @@ import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 
 import com.tom.cpl.gui.Frame;
@@ -201,8 +204,30 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 		else
 			super.render(matrixStack, -1, -1, partialTicks);
 
-		if(PointedR)
-			RenderHelper.drawMouseMenuQuad(matrixStack, mx, my);
+		if(PointedR) {
+			RenderSystem.enableBlend();
+			RenderSystem.disableDepthTest();
+			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.ONE_MINUS_DST_COLOR, GlStateManager.DestFactor.ZERO,
+					GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+			final float size = 15.0f * Math.max(ClientDataHolderVR.getInstance().vrSettings.menuCrosshairScale,
+					1.0f / (float) minecraft.getWindow().getGuiScale());
+			final int x = (int) (mx - size * 0.5f + 1.0f);
+			final int y = (int) (my - size * 0.5f + 1.0f);
+			RenderSystem.setShader((Supplier) GameRenderer::getPositionTexShader);
+			RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+			RenderSystem.setShaderTexture(0, Gui.GUI_ICONS_LOCATION);
+			final BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
+			bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+			var m = matrixStack.last().pose();
+			bufferBuilder.vertex(m, x, y, 0).uv(0.0f, 0.0f).endVertex();
+			bufferBuilder.vertex(m, x, (y + size), 0).uv(0.0f, 0.056603774f).endVertex();
+			bufferBuilder.vertex(m, (x + size), (y + size), 0).uv(0.056603774f, 0.056603774f).endVertex();
+			bufferBuilder.vertex(m, (x + size), y, 0).uv(0.056603774f, 0.0f).endVertex();
+			BufferUploader.drawWithShader(bufferBuilder.end());
+			RenderSystem.defaultBlendFunc();
+			RenderSystem.enableDepthTest();
+			RenderSystem.disableBlend();
+		}
 	}
 
 	@Override

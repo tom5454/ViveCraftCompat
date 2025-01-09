@@ -9,6 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import mcjty.theoneprobe.api.ProbeMode;
@@ -23,6 +24,10 @@ public class TOPOverlay {
 	}
 
 	public static void render(ForgeGui gui, PoseStack poseStack, float partialTick, int screenWidth, int screenHeight) {
+		var stack = RenderSystem.getModelViewStack();
+		stack.pushPose();
+		poseStack.pushPose();
+		poseStack.setIdentity();
 		if (Config.holdKeyToMakeVisible.get()) {
 			if (!KeyBindings.toggleVisible.isDown()) {
 				return;
@@ -48,6 +53,9 @@ public class TOPOverlay {
 				}
 			}
 		}
+		stack.popPose();
+		poseStack.popPose();
+		RenderSystem.applyModelViewMatrix();
 	}
 
 	private static ProbeMode getModeForPlayer() {
