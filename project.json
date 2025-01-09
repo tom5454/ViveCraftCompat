@@ -1,0 +1,39 @@
+{
+  "type": "neoforge",
+  "name": "vivecraftcompat-1.21",
+  "mcVer": "1.21",
+  "verId": "1.21",
+  "display": "[NeoForge] ViveCraft Compat 1.21",
+  "onGit": true,
+  "subver": [
+	"1.21",
+    "1.21.1"
+  ],
+  "j17": true,
+  "depProjects": [
+    {
+      "slug": "vivecraft",
+      "type": "requiredDependency"
+    },
+    {
+      "slug": "custom-player-models",
+      "type": "requiredDependency"
+    },
+    {
+      "slug": "first-person-model",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "jade",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "the-one-probe",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "journeymap",
+      "type": "optionalDependency"
+    }
+  ]
+}
