@@ -1,5 +1,6 @@
 package com.tom.vivecraftcompat;
 
+import org.joml.Vector3f;
 import org.vivecraft.client_vr.ClientDataHolderVR;
 
 import net.minecraft.world.phys.Vec3;
@@ -19,7 +20,7 @@ public class VRHelper {
 		return DATA_HOLDER.vrPlayer.vrdata_world_render.getController(0).getPosition();
 	}
 
-	public static Vec3 getRayDirection() {
+	public static Vector3f getRayDirection() {
 		return DATA_HOLDER.vrPlayer.vrdata_world_render.getController(0).getDirection();
 	}
 }

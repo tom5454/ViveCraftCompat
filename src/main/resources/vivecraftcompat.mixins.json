@@ -7,9 +7,6 @@
   "mixins": [
   ],
   "client": [
-	  "compat.firstperson.FPMVRPlayerRendererMixin",
-	  "compat.firstperson.FPMItemInHandMixin",
-	  
 	  "compat.toms_storage.TSStorageModClientMixin",
 	  
 	  "compat.jade.JadeClientPlatformProxyMixin",
@@ -23,7 +20,6 @@
 	  "VRRendererMixin",
 	  "VREffectsHelperMixin",
 	  "MCVRMixin",
-	  "ButtonMixin",
 	  "InputSimulatorMixin"
   ],
   "injectors": {

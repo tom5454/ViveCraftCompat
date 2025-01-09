@@ -56,7 +56,7 @@ Fix various compatibility issues with ViveCraft and various other mods.
 [[dependencies.vivecraftcompat]]
     modId="vivecraft"
     type="required"
-    versionRange="[1.1.11,)"
+    versionRange="[1.2.0,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.vivecraftcompat]]

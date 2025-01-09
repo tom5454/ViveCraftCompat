@@ -2,9 +2,10 @@ package com.tom.vivecraftcompat.overlay;
 
 import java.util.function.Function;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.vivecraft.client_vr.ClientDataHolderVR;
 import org.vivecraft.client_vr.VRData.VRDevicePose;
-import org.vivecraft.common.utils.math.Matrix4f;
 
 import net.minecraft.world.phys.Vec3;
 
@@ -48,6 +49,10 @@ public enum OverlayLock {
 
 		public Vec3 getPosition() {
 			return pos;
+		}
+
+		public Vector3f getPositionF() {
+			return new Vector3f((float) pos.x, (float) pos.y, (float) pos.z);
 		}
 
 		public Matrix4f getMatrix() {
