@@ -4,7 +4,7 @@
   "mcVer": "1.18",
   "verId": "1.18",
   "display": "ViveCraft Compat 1.18",
-  "git": "ViveCraftCompat-118",
+  "onGit": true,
   "subver": [
 	"1.18.2"
   ],
@@ -20,10 +20,6 @@
     },
     {
       "slug": "create",
-      "type": "optionalDependency"
-    },
-    {
-      "slug": "first-person-model",
       "type": "optionalDependency"
     },
     {
