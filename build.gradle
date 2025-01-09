@@ -180,7 +180,7 @@ dependencies {
   	
   	implementation "curse.maven:the-one-probe-245211:5084077"
   	implementation "curse.maven:jade-324717:5109393"
-  	implementation 'curse.maven:journeymap-32274:5211255'
+  	implementation 'curse.maven:journeymap-32274:5457874'
   	
   	//implementation fg.deobf("dev.architectury:architectury-forge:9.1.12")
   	
@@ -189,7 +189,7 @@ dependencies {
     }
     compileOnly("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.2-beta.5")*/
     
-    implementation 'maven.modrinth:first-person-model:cOyIi8x5'
+    implementation 'maven.modrinth:first-person-model:epnUTLMa'
     
     /*compileOnly fg.deobf('curse.maven:cc-tweaked-282001:5005529')
     compileOnly fg.deobf("com.tom5454.peripherals:TomsPeripherals-120:1.2.0")

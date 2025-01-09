@@ -31,6 +31,7 @@ import com.tom.cpl.gui.util.FlowLayout;
 import com.tom.cpl.math.Box;
 import com.tom.cpl.util.NamedElement;
 import com.tom.cpl.util.NamedElement.NameMapper;
+import com.tom.vivecraftcompat.VRMode;
 import com.tom.vivecraftcompat.overlay.OverlayManager.Layer;
 
 public class OverlaySettingsGui extends Frame {
@@ -172,7 +173,8 @@ public class OverlaySettingsGui extends Frame {
 				overlaysBox.getSelected().overlay.layer.startMovingLayer(1);
 			}
 		});
-		btnMoveL.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.moveL", MCVR.get().getOriginName(MCVR.get().getInputAction(VivecraftVRMod.INSTANCE.keyMenuButton).getLastOrigin()))));
+		String leftBtn = VRMode.isVR() ? MCVR.get().getOriginName(MCVR.get().getInputAction(VivecraftVRMod.INSTANCE.keyMenuButton).getLastOrigin()) : "?";
+		btnMoveL.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.moveL", leftBtn)));
 		btnMoveL.setBounds(new Box(5, 0, 20, 20));
 		moveBtns.addElement(btnMoveL);
 
@@ -182,7 +184,8 @@ public class OverlaySettingsGui extends Frame {
 			}
 		});
 		btnMoveR.setBounds(new Box(5 + 25, 0, 20, 20));
-		btnMoveR.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.moveR", MCVR.get().getOriginName(MCVR.get().getInputAction(VivecraftVRMod.INSTANCE.keyMenuButton).getLastOrigin()))));
+		String rightBtn = VRMode.isVR() ? MCVR.get().getOriginName(MCVR.get().getInputAction(VivecraftVRMod.INSTANCE.keyMenuButton).getLastOrigin()) : "?";
+		btnMoveR.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.moveR", rightBtn)));
 		moveBtns.addElement(btnMoveR);
 
 		rp.addElement(moveBtns);
