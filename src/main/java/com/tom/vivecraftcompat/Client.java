@@ -2,7 +2,6 @@ package com.tom.vivecraftcompat;
 
 import java.io.File;
 
-import org.vivecraft.client.gui.settings.GuiMainVRSettings;
 import org.vivecraft.client_vr.provider.ControllerType;
 
 import net.minecraft.client.Minecraft;
@@ -25,14 +24,10 @@ import com.tom.vivecraftcompat.overlay.OverlayManager;
 import com.tom.vivecraftcompat.overlay.OverlayManager.Layer;
 import com.tom.vivecraftcompat.overlay.OverlaySettingsGui;
 
-import dev.tr7zw.firstperson.config.ConfigScreenProvider;
-
 public class Client {
 	public static ModConfigFile config;
 	private static final Component CAM_BTN = new TranslatableComponent("vivecraft.gui.movethirdpersoncam");
 	private static final Component OVERLAY_BTN = new TranslatableComponent("vivecraftcompat.gui.overlays");
-	private static final Component RENDERING_BTN = new TranslatableComponent("vivecraft.options.screen.stereorendering.button");
-	private static final Component FP_CONFIG_BTN = new TranslatableComponent("vivecraftcompat.gui.firstpersonmod.config");
 
 	public static void init() {
 		registerOverlays();
@@ -54,18 +49,6 @@ public class Client {
 							layer.spawnOverlay(ControllerType.RIGHT);
 							OverlayManager.addLayer(layer);
 							Minecraft.getInstance().setScreen(null);
-						});
-						evt.addListener(b);
-						break;
-					}
-				}
-			}
-		} else if(evt.getScreen() instanceof GuiMainVRSettings) {
-			for (GuiEventListener l : evt.getListenersList()) {
-				if(l instanceof Button b) {
-					if(ModList.get().isLoaded("firstperson") && b.getMessage().equals(RENDERING_BTN)) {
-						b = new Button(b.x, b.y + 126, 150, 20, FP_CONFIG_BTN, __ -> {
-							Minecraft.getInstance().setScreen(ConfigScreenProvider.createConfigScreen(evt.getScreen()));
 						});
 						evt.addListener(b);
 						break;

@@ -8,9 +8,6 @@
   "mixins": [
   ],
   "client": [
-	  "compat.firstperson.FPMVRPlayerRendererMixin",
-	  "compat.firstperson.FPMItemInHandMixin",
-	  
 	  "compat.create.CreateBigOutlinesMixin",
 	  "compat.create.CreateTrackBlockOutlineMixin",
 	  "compat.create.CreateControlsUtilMixin",
@@ -31,7 +28,6 @@
 	  "VRRendererMixin",
 	  "VREffectsHelperMixin",
 	  "MCVRMixin",
-	  "ButtonMixin",
 	  "InputSimulatorMixin"
   ],
   "injectors": {
