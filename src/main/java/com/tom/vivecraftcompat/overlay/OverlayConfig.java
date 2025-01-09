@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.vivecraft.common.utils.math.Matrix4f;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.phys.Vec3;
 
 import com.tom.cpl.config.ConfigEntry;
 import com.tom.cpl.config.ConfigEntry.ConfigEntryList;
@@ -42,16 +42,18 @@ public class OverlayConfig {
 			layer.setScale(ce.getFloat(ConfigKeys.OVERLAY_SCALE, 1));
 			layer.setLockDirect(OverlayLock.byName(ce.getString(ConfigKeys.OVERLAY_LOCK, "")));
 			ConfigEntry pos = ce.getEntry(ConfigKeys.OVERLAY_POS);
-			layer.setPos(new Vec3(
+			layer.setPos(new Vector3f(
 					pos.getFloat("x", 0),
 					pos.getFloat("y", 0),
 					pos.getFloat("z", 0)
 					));
 			ConfigEntry rot = ce.getEntry(ConfigKeys.OVERLAY_ROTATION);
-			Matrix4f mat = new Matrix4f();
+			float[] m = new float[16];
 			for(int x = 0;x<4;x++) for(int y = 0;y<4;y++) {
-				mat.M[x][y] = rot.getFloat("m" + x + "" + y, mat.M[x][y]);
+				m[x * 4 + y] = rot.getFloat("m" + x + "" + y, m[x * 4 + y]);
 			}
+			Matrix4f mat = new Matrix4f();
+			mat.set(m);
 			layer.setRotation(mat);
 
 			loadedLayers.add(layer);
@@ -76,14 +78,15 @@ public class OverlayConfig {
 				ce.setString(ConfigKeys.OVERLAY_LOCK, l.getLock().name().toLowerCase(Locale.ROOT));
 				ce.setFloat(ConfigKeys.OVERLAY_SCALE, l.getScale());
 				ConfigEntry pos = ce.getEntry(ConfigKeys.OVERLAY_POS);
-				Vec3 p = l.getPosRaw();
-				pos.setFloat("x", (float) p.x);
-				pos.setFloat("y", (float) p.y);
-				pos.setFloat("z", (float) p.z);
+				Vector3f p = l.getPosRaw();
+				pos.setFloat("x", p.x);
+				pos.setFloat("y", p.y);
+				pos.setFloat("z", p.z);
 				ConfigEntry rot = ce.getEntry(ConfigKeys.OVERLAY_ROTATION);
 				Matrix4f r = l.getRotationRaw();
+				float[] m = r.get(new float[16]);
 				for(int x = 0;x<4;x++) for(int y = 0;y<4;y++) {
-					rot.setFloat("m" + x + "" + y, r.M[x][y]);
+					rot.setFloat("m" + x + "" + y, m[x * 4 + y]);
 				}
 			}
 		});

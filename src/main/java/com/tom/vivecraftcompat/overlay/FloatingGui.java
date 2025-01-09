@@ -2,17 +2,17 @@ package com.tom.vivecraftcompat.overlay;
 
 import java.util.function.Function;
 
+import org.joml.Matrix4f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.vivecraft.client.VivecraftVRMod;
-import org.vivecraft.client_vr.extensions.GuiExtension;
 import org.vivecraft.client_vr.gameplay.screenhandlers.GuiHandler;
-import org.vivecraft.common.utils.math.Matrix4f;
+import org.vivecraft.client_vr.render.helpers.RenderHelper;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -62,11 +62,11 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 		PointedR = false;
 
 		if (!OverlayManager.dh.vrSettings.seated) {
-			Vec3 pos = layer.getPos();
+			Vector3f pos = layer.getPos();
 			Matrix4f rotation = layer.getRotation();
 
 			//Vec2 vec2 = GuiHandler.getTexCoordsForCursor(pos, rotation, this, GuiHandler.guiScale, OverlayManager.dh.vrPlayer.vrdata_room_pre.getController(1));
-			Vec2 vec21 = GuiHandler.getTexCoordsForCursor(pos, rotation, this, GuiHandler.guiScale, OverlayManager.dh.vrPlayer.vrdata_room_pre.getController(0));
+			Vector2f vec21 = GuiHandler.getTexCoordsForCursor(pos, rotation, GuiHandler.GUI_SCALE, OverlayManager.dh.vrPlayer.vrdata_room_pre.getController(0));
 			float f = vec21.x;
 			float f1 = vec21.y;
 
@@ -141,7 +141,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 		double d2 = (double)(this.cursorX2 * this.width / this.minecraft.getWindow().getGuiScaledWidth()) * (double)this.minecraft.getWindow().getGuiScaledWidth() / this.minecraft.getWindow().getScreenWidth();
 		double d3 = (double)(this.cursorY2 * this.height / this.minecraft.getWindow().getGuiScaledHeight()) * (double)this.minecraft.getWindow().getGuiScaledWidth() / this.minecraft.getWindow().getScreenWidth();
 
-		if (PointedR && GuiHandler.keyScrollUp.consumeClick()) {
+		if (PointedR && GuiHandler.KEY_SCROLL_UP.consumeClick()) {
 			/*double cx, cy;
 			if(activecontroller == ControllerType.LEFT) {
 				cx = d0;
@@ -153,7 +153,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 			mouseScrolled(d2, d3, 4);
 		}
 
-		if (PointedR && GuiHandler.keyScrollDown.consumeClick()) {
+		if (PointedR && GuiHandler.KEY_SCROLL_DOWN.consumeClick()) {
 			/*double cx, cy;
 			if(activecontroller == ControllerType.LEFT) {
 				cx = d0;
@@ -202,7 +202,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 			super.render(matrixStack, -1, -1, partialTicks);
 
 		if(PointedR)
-			((GuiExtension) this.minecraft.gui).vivecraft$drawMouseMenuQuad(mx, my);
+			RenderHelper.drawMouseMenuQuad(matrixStack, mx, my);
 	}
 
 	@Override
@@ -274,8 +274,8 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 	@Override
 	public void setupCut() {
 		if(!noScissorTest) {
-			int dw = GuiHandler.guiWidth;
-			int dh = GuiHandler.guiHeight;
+			int dw = GuiHandler.GUI_WIDTH;
+			int dh = GuiHandler.GUI_HEIGHT;
 			float multiplierX = dw / (float)width;
 			float multiplierY = dh / (float)height;
 			Box box = getContext().cutBox;
