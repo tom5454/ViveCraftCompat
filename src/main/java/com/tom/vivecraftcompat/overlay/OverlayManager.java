@@ -56,14 +56,20 @@ public class OverlayManager {
 		MC mc = (MC) minecraft;
 		RenderTarget bak = minecraft.getMainRenderTarget();
 		overlayRendering = true;
+		RenderSystem.getModelViewStack().pushPose();
 		for (Layer layer : screens) {
+			layer.initialize();
+			if (layer.framebuffer == null)
+				continue;//??
 			mc.mc$setMainRenderTarget(layer.getFramebuffer());
 			layer.framebuffer.clear(Minecraft.ON_OSX);
 			layer.framebuffer.bindWrite(true);
+			//RenderSystem.getModelViewStack().setIdentity();
 			GuiGraphics guiGraphics = new GuiGraphics(minecraft, minecraft.renderBuffers().bufferSource());
 			RenderHelper.drawScreen(guiGraphics, partial, layer.screen, true);
 			guiGraphics.flush();
 		}
+		RenderSystem.getModelViewStack().popPose();
 		overlayRendering = false;
 		mc.mc$setMainRenderTarget(bak);
 	}
@@ -140,7 +146,7 @@ public class OverlayManager {
 		public void resize() {
 			if(VRMode.isVR()) {
 				if(framebuffer == null) {
-					framebuffer = new VRTextureTarget("HudScreen", GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT, true, -1, true, false, false);
+					framebuffer = new VRTextureTarget("VCC Overlay: " + screen.getClass().getName(), GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT, true, -1, true, false, false);
 				} else {
 					framebuffer.resize(GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT, Minecraft.ON_OSX);
 				}
@@ -151,7 +157,6 @@ public class OverlayManager {
 		}
 
 		public RenderTarget getFramebuffer() {
-			if(VRMode.isVR() && framebuffer == null)resize();
 			return framebuffer;
 		}
 
@@ -161,7 +166,7 @@ public class OverlayManager {
 			if(pose == null)
 				return pos;
 			Vec3 pp = pose.getPosition();
-			var r = pose.getMatrix().transform(new Vector4f(pos, 1f)).add(new Vector4f((float) pp.x, (float) pp.y, (float) pp.z, 1f));
+			var r = pose.getMatrix().transform(new Vector4f(pos, 1f)).add(new Vector4f((float) pp.x, (float) pp.y, (float) pp.z, 0f));
 			return new Vector3f(r.x / r.w, r.y / r.w, r.z / r.w);
 		}
 
@@ -302,6 +307,14 @@ public class OverlayManager {
 		public void setLockDirect(OverlayLock lock) {
 			this.lock = lock;
 		}
+
+		public void initialize() {
+			if (framebuffer == null)resize();
+		}
+
+		public boolean ready() {
+			return framebuffer != null;
+		}
 	}
 
 	public static void forEachLayer(Consumer<Layer> renderLayer) {
@@ -312,10 +325,11 @@ public class OverlayManager {
 	public static void renderLayers(Consumer<Layer> renderLayer) {
 		if(!VRMode.isVR())return;
 		forEachLayer(l -> {
-			//float gs = GuiHandler.GUI_SCALE;
-			//GuiHandler.GUI_SCALE = gs * l.scale;
+			if (!l.ready())return;//skip initializing layers
+			float gs = GuiHandler.GUI_SCALE;
+			GuiHandler.GUI_SCALE = gs * l.scale;
 			renderLayer.accept(l);
-			//GuiHandler.GUI_SCALE = gs;
+			GuiHandler.GUI_SCALE = gs;
 		});
 	}
 
