@@ -193,7 +193,7 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.20.1-47.2.20'
+    minecraft 'net.minecraftforge:forge:1.20.1-47.3.22'
     
     // Mixin annotation processor - generates the refmap
     //implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:0.1.1"))
@@ -225,22 +225,23 @@ dependencies {
     implementation fg.deobf("io.github.llamalad7:mixinextras-forge:0.4.1")
     //implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4675789')
   	
-  	implementation fg.deobf("com.tom5454.cpm:CustomPlayerModels-1.20:0.6.16c")
-  	implementation fg.deobf("com.tom5454.toms_storage:TomsStorage-120:1.6.6")
+  	implementation fg.deobf("com.tom5454.cpm:CustomPlayerModels-1.20:0.6.19b")
+  	implementation fg.deobf("com.tom5454.toms_storage:TomsStorage-120:1.6.9")
   	
-  	implementation fg.deobf("local:vrapi:3.0.6-1.20.1-forge")
-  	implementation fg.deobf("local:immersivemc:1.4.0-beta1.1-1.20.1-forge")
+  	//implementation fg.deobf("local:vrapi:3.0.6-1.20.1-forge")
+  	//implementation fg.deobf("local:immersivemc:1.4.0-beta1.1-1.20.1-forge")
   	
   	implementation fg.deobf("com.simibubi.create:create-${create_minecraft_version}:${create_version}:slim") { transitive = false }
     implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
   	//implementation fg.deobf("com.railwayteam.railways:Steam_Rails-forge-1.20.1:1.5.3+forge-mc1.20.1")
   	
-  	implementation fg.deobf("local:Jade:1.20.1-forge-11.4.3")
+  	//implementation fg.deobf("local:Jade:1.20.1-forge-11.4.3")
+  	implementation fg.deobf("curse.maven:jade-324717:5876199")
   	//implementation fg.deobf("curse.maven:the-twilight-forest-227639:4653704")
-  	implementation fg.deobf('curse.maven:journeymap-32274:5678927')
+  	implementation fg.deobf('curse.maven:journeymap-32274:5789363')
   	//implementation fg.deobf('local:journeymap:1.20.1-5.10.1-forge')
-  	implementation fg.deobf("curse.maven:the-one-probe-245211:4579432")
+  	implementation fg.deobf("curse.maven:the-one-probe-245211:5159287")
   	
   	implementation fg.deobf("dev.architectury:architectury-forge:9.1.12")
   	
