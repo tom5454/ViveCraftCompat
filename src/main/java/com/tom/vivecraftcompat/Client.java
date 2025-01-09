@@ -2,7 +2,6 @@ package com.tom.vivecraftcompat;
 
 import java.io.File;
 
-import org.vivecraft.client.gui.settings.GuiMainVRSettings;
 import org.vivecraft.client_vr.provider.ControllerType;
 
 import net.minecraft.client.Minecraft;
@@ -29,8 +28,6 @@ public class Client {
 	public static ModConfigFile config;
 	private static final Component CAM_BTN = Component.translatable("vivecraft.gui.movethirdpersoncam");
 	private static final Component OVERLAY_BTN = Component.translatable("vivecraftcompat.gui.overlays");
-	private static final Component RENDERING_BTN = Component.translatable("vivecraft.options.screen.stereorendering.button");
-	private static final Component FP_CONFIG_BTN = Component.translatable("vivecraftcompat.gui.firstpersonmod.config");
 
 	public static void init() {
 		NeoForge.EVENT_BUS.register(OverlayManager.class);
@@ -57,18 +54,6 @@ public class Client {
 					}
 				}
 			}
-		} else if(evt.getScreen() instanceof GuiMainVRSettings) {
-			/*for (GuiEventListener l : evt.getListenersList()) {
-				if(l instanceof Button b) {
-					if(ModList.get().isLoaded("firstperson") && b.getMessage().equals(RENDERING_BTN)) {
-						b = Button.builder(FP_CONFIG_BTN, __ -> {
-							Minecraft.getInstance().setScreen(ConfigScreenProvider.createConfigScreen(evt.getScreen()));
-						}).bounds(b.getX(), b.getY() + 126, 150, 20).build();
-						evt.addListener(b);
-						break;
-					}
-				}
-			}*/
 		}
 	}
 

@@ -18,7 +18,6 @@
 	  "VRRendererMixin",
 	  "VREffectsHelperMixin",
 	  "MCVRMixin",
-	  "ButtonMixin",
 	  "InputSimulatorMixin"
   ],
   "injectors": {

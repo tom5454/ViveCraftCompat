@@ -14,7 +14,7 @@ import com.tom.vivecraftcompat.overlay.OverlayManager;
 @Mixin(InputSimulator.class)
 public class InputSimulatorMixin {
 
-	private @Shadow(remap = false) static Set<Integer> pressedKeys;
+	private @Shadow(remap = false) static Set<Integer> PRESSED_KEYS;
 
 	@Inject(at = @At("HEAD"), method = "typeChar(C)V", cancellable = true, remap = false)
 	private static void typeChar(char character, CallbackInfo cbi) {
@@ -25,7 +25,7 @@ public class InputSimulatorMixin {
 	private static void pressKey(int key, CallbackInfo cbi) {
 		if(OverlayManager.key(key)) {
 			cbi.cancel();
-			pressedKeys.add(key);
+			PRESSED_KEYS.add(key);
 		}
 	}
 }
