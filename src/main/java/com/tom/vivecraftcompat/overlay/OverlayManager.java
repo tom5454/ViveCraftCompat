@@ -6,8 +6,10 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.vivecraft.client.VivecraftVRMod;
-import org.vivecraft.client.utils.Utils;
 import org.vivecraft.client_vr.ClientDataHolderVR;
 import org.vivecraft.client_vr.VRData;
 import org.vivecraft.client_vr.VRTextureTarget;
@@ -17,9 +19,6 @@ import org.vivecraft.client_vr.provider.ControllerType;
 import org.vivecraft.client_vr.provider.MCVR;
 import org.vivecraft.client_vr.provider.openvr_lwjgl.VRInputAction.KeyListener;
 import org.vivecraft.client_vr.render.helpers.RenderHelper;
-import org.vivecraft.common.utils.math.Matrix4f;
-import org.vivecraft.common.utils.math.Quaternion;
-import org.vivecraft.common.utils.math.Vector3;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
@@ -49,8 +48,8 @@ public class OverlayManager {
 	private static List<Layer> screens = new ArrayList<>();
 	private static boolean overlayRendering;
 
-	public static void reinitBuffers() {
-		screens.forEach(Layer::reinit);
+	public static void resizeBuffers() {
+		screens.forEach(Layer::resize);
 	}
 
 	public static void drawLayers(float partial) {
@@ -63,7 +62,7 @@ public class OverlayManager {
 			layer.framebuffer.clear(Minecraft.ON_OSX);
 			layer.framebuffer.bindWrite(true);
 
-			RenderHelper.drawScreen(partial, layer.screen, new PoseStack());
+			RenderHelper.drawScreen(new PoseStack(), partial, layer.screen, true);
 		}
 		overlayRendering = false;
 		mc.mc$setMainRenderTarget(bak);
@@ -81,8 +80,8 @@ public class OverlayManager {
 	public static void populateListeners() {
 		registerListener(minecraft.options.keyAttack, 0);
 		registerListener(minecraft.options.keyUse, 1);
-		registerListener(GuiHandler.keyLeftClick, 0);
-		registerListener(GuiHandler.keyRightClick, 1);
+		registerListener(GuiHandler.KEY_LEFT_CLICK, 0);
+		registerListener(GuiHandler.KEY_RIGHT_CLICK, 1);
 	}
 
 	private static void registerListener(KeyMapping map, int kb) {
@@ -116,7 +115,7 @@ public class OverlayManager {
 	public static class Layer {
 		private RenderTarget framebuffer = null;
 		private Screen screen;
-		private Vec3 pos = new Vec3(0.0D, 0.0D, 0.0D);
+		private Vector3f pos = new Vector3f(0.0F, 0.0F, 0.0F);
 		private Matrix4f rotation = new Matrix4f();
 		private OverlayLock lock = OverlayLock.FLOAT;
 		private float scale = 1f;
@@ -126,7 +125,7 @@ public class OverlayManager {
 		private float startDragPosX;
 		private float startDragPosY;
 		private float startDragPosZ;
-		private Quaternion startDragRot;
+		private Matrix4f startDragRot;
 		private boolean moved;
 		private OverlayLock preMoveLock;
 
@@ -138,11 +137,13 @@ public class OverlayManager {
 			this.screen = screen.apply(this);
 		}
 
-		public void reinit() {
-			if(framebuffer != null)framebuffer.destroyBuffers();
-			framebuffer = null;
+		public void resize() {
 			if(VRMode.isVR()) {
-				framebuffer = new VRTextureTarget("HudScreen", GuiHandler.guiWidth, GuiHandler.guiHeight, true, false, -1, false, true, false);
+				if(framebuffer == null) {
+					framebuffer = new VRTextureTarget("HudScreen", GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT, true, -1, true, false, false);
+				} else {
+					framebuffer.resize(GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT, Minecraft.ON_OSX);
+				}
 				int l2 = minecraft.getWindow().getGuiScaledWidth();
 				int j3 = minecraft.getWindow().getGuiScaledHeight();
 				screen.init(minecraft, l2, j3);
@@ -150,16 +151,18 @@ public class OverlayManager {
 		}
 
 		public RenderTarget getFramebuffer() {
-			if(VRMode.isVR() && framebuffer == null)reinit();
+			if(VRMode.isVR() && framebuffer == null)resize();
 			return framebuffer;
 		}
 
-		public Vec3 getPos() {
+		public Vector3f getPos() {
 			if(startControllerPose != null)return pos;
 			LockedPosition pose = lock.getLocked();
 			if(pose == null)
 				return pos;
-			return pose.getMatrix().transform(new Vector3(pos)).add(new Vector3(pose.getPosition())).toVector3d();
+			Vec3 pp = pose.getPosition();
+			var r = pose.getMatrix().transform(new Vector4f(pos, 1f)).add(new Vector4f((float) pp.x, (float) pp.y, (float) pp.z, 1f));
+			return new Vector3f(r.x / r.w, r.y / r.w, r.z / r.w);
 		}
 
 		public Matrix4f getRotation() {
@@ -167,7 +170,7 @@ public class OverlayManager {
 			LockedPosition pose = lock.getLocked();
 			if(pose == null)
 				return rotation;
-			return Matrix4f.multiply(pose.getMatrix(), rotation);
+			return pose.getMatrix().mul(rotation, new Matrix4f());
 		}
 
 		public void spawnOverlay(ControllerType controller) {
@@ -181,19 +184,19 @@ public class OverlayManager {
 			vrdata$vrdevicepose = dh.vrPlayer.vrdata_room_pre.getController(i);
 			f = 1.2F;
 
-			Vec3 vec3 = vrdata$vrdevicepose.getPosition();
-			Vec3 vec31 = new Vec3(0.0D, 0.0D, (-f));
-			Vec3 vec32 = vrdata$vrdevicepose.getCustomVector(vec31);
-			pos = new Vec3(vec32.x / 2.0D + vec3.x, vec32.y / 2.0D + vec3.y, vec32.z / 2.0D + vec3.z);
-			Vector3 vector3 = new Vector3();
-			vector3.setX((float)(pos.x - vec3.x));
-			vector3.setY((float)(pos.y - vec3.y));
-			vector3.setZ((float)(pos.z - vec3.z));
-			float f1 = (float)Math.asin(vector3.getY() / vector3.length());
-			float f2 = (float)((float)Math.PI + Math.atan2(vector3.getX(), vector3.getZ()));
-			rotation = Matrix4f.rotationY(f2);
-			Matrix4f matrix4f = Utils.rotationXMatrix(f1);
-			rotation = Matrix4f.multiply(rotation, matrix4f);
+			Vector3f vec3 = vrdata$vrdevicepose.getPositionF();
+			Vector3f vec31 = new Vector3f(0.0F, 0.0F, (-f));
+			Vector3f vec32 = vrdata$vrdevicepose.getCustomVector(vec31);
+			pos = new Vector3f(vec32.x / 2.0F + vec3.x, vec32.y / 2.0F + vec3.y, vec32.z / 2.0F + vec3.z);
+			Vector3f vector3 = new Vector3f();
+			vector3.x = (pos.x - vec3.x);
+			vector3.y = (pos.y - vec3.y);
+			vector3.z = (pos.z - vec3.z);
+			float f1 = (float)Math.asin(vector3.y / vector3.length());
+			float f2 = (float)((float)Math.PI + Math.atan2(vector3.x, vector3.z));
+			rotation = new Matrix4f().rotationY(f2);
+			Matrix4f matrix4f = new Matrix4f().rotationX(f1);
+			rotation.mul(matrix4f);
 		}
 
 		public void remove() {
@@ -205,8 +208,12 @@ public class OverlayManager {
 			screens.remove(this);
 		}
 
-		public void setPos(Vec3 pos) {
+		public void setPos(Vector3f pos) {
 			this.pos = pos;
+		}
+
+		public void setPos(Vector4f pos) {
+			this.pos = new Vector3f(pos.x, pos.y, pos.z);
 		}
 
 		public void setRotation(Matrix4f rotation) {
@@ -218,10 +225,10 @@ public class OverlayManager {
 			setLock(OverlayLock.FLOAT);
 			startController = controller;
 			startControllerPose = dh.vrPlayer.vrdata_room_pre.getController(controller);
-			startDragPosX = (float) pos.x;
-			startDragPosY = (float) pos.y;
-			startDragPosZ = (float) pos.z;
-			startDragRot = new Quaternion(rotation);
+			startDragPosX = pos.x;
+			startDragPosY = pos.y;
+			startDragPosZ = pos.z;
+			startDragRot = new Matrix4f(rotation);
 			moved = false;
 		}
 
@@ -230,14 +237,15 @@ public class OverlayManager {
 				VRData.VRDevicePose vrdata$vrdevicepose = dh.vrPlayer.vrdata_room_pre.getController(startController);
 				Vec3 vec3 = startControllerPose.getPosition();
 				Vec3 vec31 = vrdata$vrdevicepose.getPosition().subtract(vec3);
-				Matrix4f matrix4f = Matrix4f.multiply(vrdata$vrdevicepose.getMatrix(), startControllerPose.getMatrix().inverted());
-				Vector3 vector3 = new Vector3(startDragPosX - (float)vec3.x, startDragPosY - (float)vec3.y, startDragPosZ - (float)vec3.z);
-				Vector3 vector31 = matrix4f.transform(vector3);
-				float px = startDragPosX + (float)vec31.x + (vector31.getX() - vector3.getX());
-				float py = startDragPosY + (float)vec31.y + (vector31.getY() - vector3.getY());
-				float pz = startDragPosZ + (float)vec31.z + (vector31.getZ() - vector3.getZ());
-				setPos(new Vec3(px, py, pz));
-				setRotation(Matrix4f.multiply(matrix4f, new Matrix4f(startDragRot)));
+
+				Matrix4f matrix4f = vrdata$vrdevicepose.getMatrix().mul(startControllerPose.getMatrix().invert(new Matrix4f()), new Matrix4f());
+				Vector3f vector3 = new Vector3f(startDragPosX - (float)vec3.x, startDragPosY - (float)vec3.y, startDragPosZ - (float)vec3.z);
+				Vector4f vector31 = matrix4f.transform(new Vector4f(vector3, 1));
+				float px = startDragPosX + (float)vec31.x + (vector31.x - vector3.x);
+				float py = startDragPosY + (float)vec31.y + (vector31.y - vector3.y);
+				float pz = startDragPosZ + (float)vec31.z + (vector31.z - vector3.z);
+				setPos(new Vector3f(px, py, pz));
+				setRotation(matrix4f.mul(startDragRot));
 				moved = true;
 			}
 		}
@@ -265,8 +273,8 @@ public class OverlayManager {
 			this.lock = lock;
 			LockedPosition pose = lock.getLocked();
 			if (pose != null) {
-				Matrix4f mat = Matrix4f.multiply(pose.getMatrix().inverted(), rotation);
-				setPos(pose.getMatrix().inverted().transform(new Vector3(pos).subtract(new Vector3(pose.getPosition()))).toVector3d());
+				Matrix4f mat = pose.getMatrix().invert(new Matrix4f()).mul(rotation);
+				setPos(pose.getMatrix().invert(new Matrix4f()).transform(new Vector4f(new Vector3f(pos).sub(pose.getPositionF()), 1)));
 				setRotation(mat);
 			}
 		}
@@ -283,7 +291,7 @@ public class OverlayManager {
 			return scale;
 		}
 
-		public Vec3 getPosRaw() {
+		public Vector3f getPosRaw() {
 			return pos;
 		}
 
@@ -304,10 +312,10 @@ public class OverlayManager {
 	public static void renderLayers(Consumer<Layer> renderLayer) {
 		if(!VRMode.isVR())return;
 		forEachLayer(l -> {
-			float gs = GuiHandler.guiScale;
-			GuiHandler.guiScale = gs * l.scale;
+			//float gs = GuiHandler.GUI_SCALE;
+			//GuiHandler.GUI_SCALE = gs * l.scale;
 			renderLayer.accept(l);
-			GuiHandler.guiScale = gs;
+			//GuiHandler.GUI_SCALE = gs;
 		});
 	}
 
@@ -333,7 +341,7 @@ public class OverlayManager {
 				layer.stopMovingLayer();
 			}
 		}
-		if(KeyboardHandler.Showing)return;
+		if(KeyboardHandler.SHOWING)return;
 		forEachLayer(s -> {
 			if(s.screen instanceof VRInteractableScreen i)
 				i.processBindings();

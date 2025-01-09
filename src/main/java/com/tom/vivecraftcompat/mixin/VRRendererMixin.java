@@ -12,8 +12,8 @@ import com.tom.vivecraftcompat.overlay.OverlayManager;
 @Mixin(VRRenderer.class)
 public class VRRendererMixin {
 
-	@Inject(at = @At(value = "FIELD", target = "Lorg/vivecraft/client_vr/gameplay/screenhandlers/GuiHandler;guiFramebuffer:Lcom/mojang/blaze3d/pipeline/RenderTarget;", remap = false, opcode = Opcodes.PUTSTATIC), method = "setupRenderConfiguration", remap = false)
+	@Inject(at = @At(value = "FIELD", target = "Lorg/vivecraft/client_vr/gameplay/screenhandlers/GuiHandler;GUI_FRAMEBUFFER:Lcom/mojang/blaze3d/pipeline/RenderTarget;", remap = false, opcode = Opcodes.PUTSTATIC), method = "setupRenderConfiguration", remap = false)
 	public void setupRenderConfiguration(CallbackInfo cbi) {
-		OverlayManager.reinitBuffers();
+		OverlayManager.resizeBuffers();
 	}
 }
