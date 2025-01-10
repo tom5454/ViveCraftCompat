@@ -56,7 +56,6 @@ public class OverlayManager {
 		MC mc = (MC) minecraft;
 		RenderTarget bak = minecraft.getMainRenderTarget();
 		overlayRendering = true;
-		RenderSystem.getModelViewStack().pushPose();
 		for (Layer layer : screens) {
 			layer.initialize();
 			if (layer.framebuffer == null)
@@ -64,12 +63,10 @@ public class OverlayManager {
 			mc.mc$setMainRenderTarget(layer.getFramebuffer());
 			layer.framebuffer.clear(Minecraft.ON_OSX);
 			layer.framebuffer.bindWrite(true);
-			//RenderSystem.getModelViewStack().setIdentity();
 			GuiGraphics guiGraphics = new GuiGraphics(minecraft, minecraft.renderBuffers().bufferSource());
 			RenderHelper.drawScreen(guiGraphics, partial, layer.screen, true);
 			guiGraphics.flush();
 		}
-		RenderSystem.getModelViewStack().popPose();
 		overlayRendering = false;
 		mc.mc$setMainRenderTarget(bak);
 	}

@@ -19,7 +19,7 @@ public class JadeOverlay {
 		try {
 			OverlayRenderer.renderOverlay478757(gr, p_348559_.getGameTimeDeltaPartialTick(false));
 		} catch (Throwable e) {
-			WailaExceptionHandler.handleErr(e, null, null, null);
+			WailaExceptionHandler.handleErr(e, null, null);
 		}
 	}
 }
