@@ -1,28 +1,32 @@
 {
 	"homepage": "https://curseforge.com/minecraft/mc-mods/vivecraft-compat",
 	"promos": {
-		"1.21.1-latest": "1.4.0",
-		"1.21-latest": "1.4.0",
-		"1.20.4-latest": "1.4.0",
-		"1.20.1-latest": "1.4.0",
-		"1.19.2-latest": "1.4.0",
-		"1.18.2-latest": "1.4.0"
+		"1.21.1-latest": "1.4.1",
+		"1.21-latest": "1.4.1",
+		"1.20.4-latest": "1.4.1",
+		"1.20.1-latest": "1.4.1",
+		"1.19.2-latest": "1.4.1",
+		"1.18.2-latest": "1.4.1"
 	},
 	"1.21.1": {
+		"1.4.1": "Fixed logspam when opening overlays",
 		"1.4.0": "vivecraft 1.2.0 update",
 		"1.3.7": "Fixed JourneyMap overlay not working"
 	},
 	"1.21": {
+		"1.4.1": "Fixed logspam when opening overlays",
 		"1.4.0": "vivecraft 1.2.0 update",
 		"1.3.7": "Fixed JourneyMap overlay not working",
 		"1.3.6": "1.21 port"
 	},
 	"1.20.4": {
+		"1.4.1": "Fixed logspam when opening overlays",
 		"1.4.0": "vivecraft 1.2.0 update",
 		"1.3.4": "Fixed crash with the latest version of FPM",
 		"1.3.3": "1.20.4 port"
 	},
 	"1.20.1": {
+		"1.4.1": "Fixed logspam when opening overlays",
 		"1.4.0": "vivecraft 1.2.0 update",
 		"1.3.6": "Fixed JourneyMap overlay not working",
 		"1.3.5": "Updated to ViveCraft 1.1.11",
@@ -35,6 +39,7 @@
 		"1.1.0": "1.20 port"
 	},
 	"1.19.2": {
+		"1.4.1": "Fixed logspam when opening overlays",
 		"1.4.0": "vivecraft 1.2.0 update",
 		"1.3.4": "Fixed First Person Model crash",
 		"1.3.3": "Updated to ViveCraft 1.1.11",
@@ -46,6 +51,7 @@
 		"1.0.0": "First release"
 	},
 	"1.18.2": {
+		"1.4.1": "Fixed logspam when opening overlays",
 		"1.4.0": "vivecraft 1.2.0 update",
 		"1.3.4": "Fixed First Person Model crash",
 		"1.3.3": "Updated to ViveCraft 1.1.11",
