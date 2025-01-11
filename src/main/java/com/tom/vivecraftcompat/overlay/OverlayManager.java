@@ -71,6 +71,7 @@ public class OverlayManager {
 			guiGraphics.flush();
 		}
 		RenderSystem.getModelViewStack().popPose();
+		RenderSystem.applyModelViewMatrix();
 		overlayRendering = false;
 		mc.mc$setMainRenderTarget(bak);
 		bak.bindWrite(true);
