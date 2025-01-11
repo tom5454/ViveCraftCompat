@@ -71,8 +71,10 @@ public class OverlayManager {
 			RenderHelper.drawScreen(new PoseStack(), partial, layer.screen, true);
 		}
 		RenderSystem.getModelViewStack().popPose();
+		RenderSystem.applyModelViewMatrix();
 		overlayRendering = false;
 		mc.mc$setMainRenderTarget(bak);
+		bak.bindWrite(true);
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
