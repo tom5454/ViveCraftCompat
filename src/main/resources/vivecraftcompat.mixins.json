@@ -7,9 +7,6 @@
   "mixins": [
   ],
   "client": [
-	  "compat.firstperson.FPMVRPlayerRendererMixin",
-	  "compat.firstperson.FPMItemInHandMixin",
-	  
 	  "compat.create.CreateBigOutlinesMixin",
 	  "compat.create.CreateTrackBlockOutlineMixin",
 	  "compat.create.CreateControlsUtilMixin",
@@ -18,9 +15,7 @@
 	  "compat.create.CreateContraptionControlsMovingInteractionMixin",
 	  "compat.create.CreateLocalPlayerMixin",
 	  
-	  "compat.toms_storage.TSStorageModClientMixin",
-	  
-	  "compat.jade.JadeRayTracingMixin"
+	  "compat.toms_storage.TSStorageModClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
