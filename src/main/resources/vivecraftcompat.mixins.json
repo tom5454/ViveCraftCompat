@@ -15,6 +15,7 @@
 	  "compat.theoneprobe.ClientSetupMixin",
 	  
 	  "MinecraftMixin",
+	  "MinecraftMixin_OverlayRender",
 	  "VRRendererMixin",
 	  "VREffectsHelperMixin",
 	  "MCVRMixin",
