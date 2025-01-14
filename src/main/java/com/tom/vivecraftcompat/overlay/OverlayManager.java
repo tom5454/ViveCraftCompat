@@ -35,7 +35,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import com.mojang.blaze3d.pipeline.RenderTarget;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 
 import com.tom.vivecraftcompat.VRMode;
 import com.tom.vivecraftcompat.access.MC;
@@ -58,7 +57,6 @@ public class OverlayManager {
 		MC mc = (MC) minecraft;
 		RenderTarget bak = minecraft.getMainRenderTarget();
 		overlayRendering = true;
-		RenderSystem.getModelViewStack().pushPose();
 		for (Layer layer : screens) {
 			layer.initialize();
 			if (layer.framebuffer == null)
@@ -67,11 +65,8 @@ public class OverlayManager {
 			layer.framebuffer.clear(Minecraft.ON_OSX);
 			layer.framebuffer.bindWrite(true);
 
-			RenderSystem.getModelViewStack().setIdentity();
-			RenderHelper.drawScreen(new PoseStack(), partial, layer.screen, true);
+			RenderHelper.drawScreen(partial, layer.screen, true);
 		}
-		RenderSystem.getModelViewStack().popPose();
-		RenderSystem.applyModelViewMatrix();
 		overlayRendering = false;
 		mc.mc$setMainRenderTarget(bak);
 		bak.bindWrite(true);
