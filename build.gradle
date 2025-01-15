@@ -162,7 +162,7 @@ dependencies {
   	//implementation fg.deobf('curse.maven:oculus-581495:4578741')
   	
   	compileOnly 'com.github.Virtuoel:Pehkui:3.8.0-1.20.4-neoforge'
-    compileOnly 'maven.modrinth:vivecraft:1.20.4-1.2.0-neoforge'
+    compileOnly 'maven.modrinth:vivecraft:1.20.4-1.2.2-neoforge'
     //implementation fg.deobf("io.github.llamalad7:mixinextras-forge:0.4.1")
     //implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4675789')
   	

@@ -1,5 +1,5 @@
 {
-	"vivecraftcompat.gui.overlays": "Overlays",
+	"vivecraftcompat.gui.overlays": "HUD Overlays",
 	"vivecraftcompat.gui.overlay.create": "[Create New]",
 	"vivecraftcompat.gui.overlay.name": "Overlay %d",
 	"vivecraftcompat.gui.overlay.lock": "Lock overlay to:",
