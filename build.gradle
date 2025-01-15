@@ -221,7 +221,7 @@ dependencies {
   	//implementation fg.deobf('curse.maven:oculus-581495:4578741')
   	
   	implementation fg.deobf("com.github.Virtuoel:Pehkui:3.7.7-1.20.1-forge")
-    implementation fg.deobf('maven.modrinth:vivecraft:1.20.1-1.2.0-forge')
+    implementation fg.deobf('maven.modrinth:vivecraft:1.20.1-1.2.2-forge')
     implementation fg.deobf("io.github.llamalad7:mixinextras-forge:0.4.1")
     //implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4675789')
   	
