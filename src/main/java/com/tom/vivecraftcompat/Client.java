@@ -27,7 +27,7 @@ import com.tom.vivecraftcompat.overlay.OverlaySettingsGui;
 
 public class Client {
 	public static ModConfigFile config;
-	private static final Component CAM_BTN = Component.translatable("vivecraft.gui.movethirdpersoncam");
+	private static final Component CAM_BTN = Component.translatable("vivecraft.gui.screenshot");
 	private static final Component OVERLAY_BTN = Component.translatable("vivecraftcompat.gui.overlays");
 
 	public static void init() {
