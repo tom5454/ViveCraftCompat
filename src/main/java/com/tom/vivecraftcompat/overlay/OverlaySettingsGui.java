@@ -5,8 +5,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 import org.vivecraft.client.VivecraftVRMod;
 import org.vivecraft.client_vr.provider.ControllerType;
 import org.vivecraft.client_vr.provider.MCVR;
@@ -19,14 +23,17 @@ import net.minecraftforge.client.gui.overlay.NamedGuiOverlay;
 import com.tom.cpl.gui.Frame;
 import com.tom.cpl.gui.IGui;
 import com.tom.cpl.gui.elements.Button;
+import com.tom.cpl.gui.elements.ButtonIcon;
 import com.tom.cpl.gui.elements.ConfirmPopup;
 import com.tom.cpl.gui.elements.DropDownBox;
 import com.tom.cpl.gui.elements.InputPopup;
 import com.tom.cpl.gui.elements.Label;
 import com.tom.cpl.gui.elements.ListPicker;
 import com.tom.cpl.gui.elements.Panel;
+import com.tom.cpl.gui.elements.PopupPanel;
 import com.tom.cpl.gui.elements.ScrollPanel;
 import com.tom.cpl.gui.elements.Slider;
+import com.tom.cpl.gui.elements.Spinner;
 import com.tom.cpl.gui.elements.Tooltip;
 import com.tom.cpl.gui.util.FlowLayout;
 import com.tom.cpl.math.Box;
@@ -34,6 +41,8 @@ import com.tom.cpl.util.NamedElement;
 import com.tom.cpl.util.NamedElement.NameMapper;
 import com.tom.vivecraftcompat.VRMode;
 import com.tom.vivecraftcompat.overlay.OverlayManager.Layer;
+
+import it.unimi.dsi.fastutil.booleans.BooleanConsumer;
 
 public class OverlaySettingsGui extends Frame {
 	private List<OverlayElement> overlays;
@@ -50,7 +59,7 @@ public class OverlaySettingsGui extends Frame {
 	private Button btnAdd, btnDel;
 	private Set<ResourceLocation> allElements;
 	private Slider sliderScale;
-	private Button btnMoveL, btnMoveR;
+	private List<BooleanConsumer> moveUpdater = new ArrayList<>();
 
 	public OverlaySettingsGui(IGui gui) {
 		super(gui);
@@ -132,7 +141,7 @@ public class OverlaySettingsGui extends Frame {
 		rscp.setBounds(new Box(lw + 5, 30, rw + 5, h - 30));
 		p.addElement(rscp);
 
-		initLayerSettings(rp, rw);
+		initLayerSettings(rp, rw - 5);
 
 		currentElementsScp = new ScrollPanel(gui);
 		currentElements = new Panel(gui);
@@ -169,7 +178,7 @@ public class OverlaySettingsGui extends Frame {
 		Panel moveBtns = new Panel(gui);
 		moveBtns.setBounds(new Box(0, 0, rw, 20));
 
-		btnMoveL = new Button(gui, "L", () -> {
+		Button btnMoveL = new Button(gui, "L", () -> {
 			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
 				overlaysBox.getSelected().overlay.layer.startMovingLayer(1);
 			}
@@ -178,8 +187,9 @@ public class OverlaySettingsGui extends Frame {
 		btnMoveL.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.moveL", leftBtn)));
 		btnMoveL.setBounds(new Box(5, 0, 20, 20));
 		moveBtns.addElement(btnMoveL);
+		moveUpdater.add(btnMoveL::setEnabled);
 
-		btnMoveR = new Button(gui, "R", () -> {
+		Button btnMoveR = new Button(gui, "R", () -> {
 			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
 				overlaysBox.getSelected().overlay.layer.startMovingLayer(0);
 			}
@@ -188,8 +198,13 @@ public class OverlaySettingsGui extends Frame {
 		String rightBtn = VRMode.isVR() ? MCVR.get().getOriginName(MCVR.get().getInputAction(VivecraftVRMod.INSTANCE.keyMenuButton).getLastOrigin()) : "?";
 		btnMoveR.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.moveR", rightBtn)));
 		moveBtns.addElement(btnMoveR);
+		moveUpdater.add(btnMoveR::setEnabled);
 
 		rp.addElement(moveBtns);
+
+		Panel movementPanel = new Panel(gui);
+		movementPanel.setBounds(new Box(5, 0, rw, 80));
+		rp.addElement(movementPanel);
 
 		sliderScale = new Slider(gui, formatScale(1));
 		sliderScale.setValue(1 / 5f);
@@ -217,7 +232,152 @@ public class OverlaySettingsGui extends Frame {
 			}
 		});
 
+		addMoveButtons(movementPanel, "move", 0, 32, d -> {
+			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
+				overlaysBox.getSelected().overlay.layer.addPos(d);
+			}
+		});
+		addMoveButtons(movementPanel, "rot", 80, 48, d -> {
+			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
+				overlaysBox.getSelected().overlay.layer.addRotation(new Vector3f(d.y, d.x, -d.z));
+			}
+		});
+		Button btnEdit = new Button(gui, "E", () -> {
+			if (overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null) {
+				openPopup(new OverlayPosRotEditPopup(gui, overlaysBox.getSelected().overlay.layer));
+			}
+		});
+		btnEdit.setTooltip(new Tooltip(this, gui.i18nFormat("tooltip.vivecraftcompat.overlay.edit")));
+		btnEdit.setBounds(new Box(60, 0, 20, 20));
+		moveBtns.addElement(btnEdit);
+		moveUpdater.add(btnEdit::setEnabled);
+
 		layout.reflow();
+	}
+
+	private class OverlayPosRotEditPopup extends PopupPanel {
+
+		public OverlayPosRotEditPopup(IGui gui, Layer layer) {
+			super(gui);
+
+			Vector3f oldPos = layer.getPosRaw();
+			Matrix4f oldRot = layer.getRotationRaw();
+
+			Spinner spinnerX = new Spinner(gui);
+			Spinner spinnerY = new Spinner(gui);
+			Spinner spinnerZ = new Spinner(gui);
+
+			addElement(new Label(gui, "X").setBounds(new Box(5, 6, 0, 0)));
+			addElement(new Label(gui, "Y").setBounds(new Box(5, 36, 0, 0)));
+			addElement(new Label(gui, "Z").setBounds(new Box(5, 66, 0, 0)));
+
+			spinnerX.setBounds(new Box(5, 15, 120, 20));
+			spinnerY.setBounds(new Box(5, 45, 120, 20));
+			spinnerZ.setBounds(new Box(5, 75, 120, 20));
+			spinnerX.setDp(5);
+			spinnerY.setDp(5);
+			spinnerZ.setDp(5);
+			addElement(spinnerX);
+			addElement(spinnerY);
+			addElement(spinnerZ);
+			spinnerX.setValue(layer.getPosRaw().x);
+			spinnerY.setValue(layer.getPosRaw().y);
+			spinnerZ.setValue(layer.getPosRaw().z);
+
+			Spinner spinnerRX = new Spinner(gui);
+			Spinner spinnerRY = new Spinner(gui);
+			Spinner spinnerRZ = new Spinner(gui);
+
+			addElement(new Label(gui, gui.i18nFormat("vivecraftcompat.gui.overlay.move.popup.pitch")).setBounds(new Box(130, 6, 0, 0)));
+			addElement(new Label(gui, gui.i18nFormat("vivecraftcompat.gui.overlay.move.popup.yaw")).setBounds(new Box(130, 36, 0, 0)));
+			addElement(new Label(gui, gui.i18nFormat("vivecraftcompat.gui.overlay.move.popup.roll")).setBounds(new Box(130, 66, 0, 0)));
+
+			spinnerRX.setBounds(new Box(130, 15, 120, 20));
+			spinnerRY.setBounds(new Box(130, 45, 120, 20));
+			spinnerRZ.setBounds(new Box(130, 75, 120, 20));
+			spinnerRX.setDp(5);
+			spinnerRY.setDp(5);
+			spinnerRZ.setDp(5);
+			addElement(spinnerRX);
+			addElement(spinnerRY);
+			addElement(spinnerRZ);
+
+			Matrix4f rotationMatrix = layer.getRotationRaw();
+			Quaternionf quaternion = new Quaternionf();
+			rotationMatrix.getUnnormalizedRotation(quaternion);
+			Vector3f rot = quaternion.getEulerAnglesXYZ(new Vector3f());
+			spinnerRX.setValue(rot.x);
+			spinnerRY.setValue(rot.y);
+			spinnerRZ.setValue(rot.z);
+
+			Runnable r = () -> {
+				layer.setPos(new Vector3f(spinnerX.getValue(), spinnerY.getValue(), spinnerZ.getValue()));
+				Quaternionf q = new Quaternionf();
+				q.rotateXYZ(spinnerRX.getValue(), spinnerRY.getValue(), spinnerRZ.getValue());
+				Matrix4f mat = new Matrix4f().rotate(q);
+				layer.setRotation(mat);
+			};
+			spinnerX.addChangeListener(r);
+			spinnerY.addChangeListener(r);
+			spinnerZ.addChangeListener(r);
+			spinnerRX.addChangeListener(r);
+			spinnerRY.addChangeListener(r);
+			spinnerRZ.addChangeListener(r);
+
+			Button btn = new Button(gui, gui.i18nFormat("button.cpm.ok"), () -> {
+				close();
+			});
+			Button btnNo = new Button(gui, gui.i18nFormat("button.cpm.cancel"), () -> {
+				close();
+				layer.setPos(oldPos);
+				layer.setRotation(oldRot);
+			});
+			btn.setBounds(new Box(5, 100, 40, 20));
+			btnNo.setBounds(new Box(50, 100, 40, 20));
+			addElement(btn);
+			addElement(btnNo);
+
+			setBounds(new Box(0, 0, 260, 125));
+		}
+
+		@Override
+		public String getTitle() {
+			return gui.i18nFormat("vivecraftcompat.gui.overlay.move.popup");
+		}
+	}
+
+	private void addMoveButtons(Panel panel, String name, int x, int imgX, Consumer<Vector3f> event) {
+		ButtonIcon up = new ButtonIcon(gui, "vcc_overlay_btns", 0, 0, () -> event.accept(new Vector3f(0, 1, 0)));
+		ButtonIcon down = new ButtonIcon(gui, "vcc_overlay_btns", 0, 16, () -> event.accept(new Vector3f(0, -1, 0)));
+		ButtonIcon left = new ButtonIcon(gui, "vcc_overlay_btns", 16, 0, () -> event.accept(new Vector3f(-1, 0, 0)));
+		ButtonIcon right = new ButtonIcon(gui, "vcc_overlay_btns", 16, 16, () -> event.accept(new Vector3f(1, 0, 0)));
+		ButtonIcon fwd = new ButtonIcon(gui, "vcc_overlay_btns", imgX, 0, () -> event.accept(new Vector3f(0, 0, -1)));
+		ButtonIcon back = new ButtonIcon(gui, "vcc_overlay_btns", imgX, 16, () -> event.accept(new Vector3f(0, 0, 1)));
+
+		up.setBounds(new Box(x + 25, 10, 20, 20));
+		down.setBounds(new Box(x + 25, 60, 20, 20));
+		left.setBounds(new Box(x, 35, 20, 20));
+		right.setBounds(new Box(x + 50, 35, 20, 20));
+		fwd.setBounds(new Box(x + 50, 10, 20, 20));
+		back.setBounds(new Box(x + 50, 60, 20, 20));
+
+		panel.addElement(new Label(gui, gui.i18nFormat("vivecraftcompat.gui.overlay.move." + name)).setBounds(new Box(x, 0, 0, 0)));
+
+		panel.addElement(up);
+		panel.addElement(down);
+		panel.addElement(left);
+		panel.addElement(right);
+		panel.addElement(fwd);
+		panel.addElement(back);
+
+		moveUpdater.add(v -> {
+			up.setEnabled(v);
+			down.setEnabled(v);
+			left.setEnabled(v);
+			right.setEnabled(v);
+			fwd.setEnabled(v);
+			back.setEnabled(v);
+		});
 	}
 
 	private String formatScale(float def) {
@@ -321,8 +481,7 @@ public class OverlaySettingsGui extends Frame {
 	@Override
 	public void tick() {
 		boolean en = overlaysBox.getSelected() != null && overlaysBox.getSelected().overlay != null && !overlaysBox.getSelected().overlay.layer.isMoving();
-		btnMoveL.setEnabled(en);
-		btnMoveR.setEnabled(en);
+		moveUpdater.forEach(e -> e.accept(en));
 	}
 
 	public class OverlayElement {

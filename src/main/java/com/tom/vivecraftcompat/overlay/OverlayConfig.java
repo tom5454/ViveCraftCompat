@@ -48,7 +48,7 @@ public class OverlayConfig {
 					pos.getFloat("x", 0),
 					pos.getFloat("y", 0),
 					pos.getFloat("z", 0)
-			));
+					));
 
 			ConfigEntry rot = ce.getEntry(ConfigKeys.OVERLAY_ROTATION);
 			// Convert Legacy Matrix4f to Quaternion if needed,
@@ -90,7 +90,6 @@ public class OverlayConfig {
 		Minecraft.getInstance().execute(() -> loadedLayers.forEach(OverlayManager::addLayer));
 	}
 
-
 	public static void saveOverlays() {
 		ConfigEntryTemp config = Client.config.createTemp();
 		ConfigEntry ovs = config.getEntry(ConfigKeys.OVERLAY_ELEMENT_LIST);
@@ -126,5 +125,4 @@ public class OverlayConfig {
 		});
 		config.saveConfig();
 	}
-
 }

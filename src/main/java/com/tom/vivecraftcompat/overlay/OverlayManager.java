@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.vivecraft.client.VivecraftVRMod;
@@ -317,6 +318,21 @@ public class OverlayManager {
 
 		public boolean ready() {
 			return framebuffer != null;
+		}
+
+		public void addPos(Vector3f d) {
+			pos.x += d.x * .025f;
+			pos.y += d.y * .025f;
+			pos.z += d.z * .025f;
+		}
+
+		public void addRotation(Vector3f d) {
+			Matrix4f rotationMatrix = getRotationRaw();
+			Quaternionf quaternion = new Quaternionf();
+			rotationMatrix.getUnnormalizedRotation(quaternion);
+			quaternion.rotateAxis((float) Math.toRadians(10), d);
+			Matrix4f mat = new Matrix4f().rotate(quaternion);
+			setRotation(mat);
 		}
 	}
 
