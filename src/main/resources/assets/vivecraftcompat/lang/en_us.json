@@ -17,12 +17,19 @@
 	"vivecraftcompat.gui.overlay.enable.always": "Always",
 	"vivecraftcompat.gui.overlay.enable.ingame": "Only in-game",
 	"vivecraftcompat.gui.overlay.enable.disable": "Hidden",
+	"vivecraftcompat.gui.overlay.move.move": "Move",
+	"vivecraftcompat.gui.overlay.move.rot": "Rotate",
+	"vivecraftcompat.gui.overlay.move.popup": "Edit Overlay Position Rotation",
+	"vivecraftcompat.gui.overlay.move.popup.yaw": "Yaw",
+	"vivecraftcompat.gui.overlay.move.popup.pitch": "Pitch",
+	"vivecraftcompat.gui.overlay.move.popup.roll": "Roll",
 	
 	"vivecraftcompat.gui.create.value_settings.click_to_confirm": "Click to Confirm",
 	"vivecraftcompat.gui.create.elevator.floor_select": "Select Floor",
 	
 	"tooltip.vivecraftcompat.overlay.moveL": "Move overlay with the Left Controller\\Press %s to stop moving",
 	"tooltip.vivecraftcompat.overlay.moveR": "Move overlay with the Right Controller\\Press %s to stop moving",
+	"tooltip.vivecraftcompat.overlay.edit": "Edit raw overlay position and rotation",
 	
 	"overlay.vivecraftcompat.jade": "Jade (Compatibility Mode)",
 	"overlay.vivecraftcompat.journeymap": "Journey Map (Compatibility Mode)",
