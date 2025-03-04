@@ -62,7 +62,7 @@ Fix various compatibility issues with ViveCraft and various other mods.
 [[dependencies.vivecraftcompat]]
     modId="create"
     mandatory=false
-    versionRange="[0.5.1.a,0.6.0)"
+    versionRange="[6.0.0,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.vivecraftcompat]]

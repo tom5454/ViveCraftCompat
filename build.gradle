@@ -60,6 +60,9 @@ minecraft {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', 'vivecraftcompat'
             
+            property 'mixin.env.remapRefMap', 'true'
+			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
+            
             property 'production', 'true'
 
             mods {
@@ -148,11 +151,9 @@ repositories {
     	name = "Jared's maven"
     	url = "https://maven.blamejared.com/"
 	}
-	maven {
-        // Location of the maven for mixed mappings, Registrate, and Flywheel
-        name 'tterrag maven'
-        url 'https://maven.tterrag.com'
-    }
+	maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
+    maven { url = "https://maven.tterrag.com" } // Registrate
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // ForgeConfigAPIPort
 	maven {
         url 'https://www.cursemaven.com'
         content {
@@ -212,10 +213,10 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
     // compile against the JEI API but do not include it at runtime
-    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.2.0.22")
-    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.2.0.22")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-forge-api:15.20.0.106")
+    compileOnly fg.deobf("mezz.jei:jei-1.20.1-common-api:15.20.0.106")
   	// at runtime, use the full JEI jar
-  	runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge:15.2.0.22")
+  	runtimeOnly fg.deobf("mezz.jei:jei-1.20.1-forge:15.20.0.106")
   	
   	//implementation fg.deobf('curse.maven:rubidium-574856:4684247')
   	//implementation fg.deobf('curse.maven:oculus-581495:4578741')
@@ -231,9 +232,11 @@ dependencies {
   	//implementation fg.deobf("local:vrapi:3.0.6-1.20.1-forge")
   	//implementation fg.deobf("local:immersivemc:1.4.0-beta1.1-1.20.1-forge")
   	
-  	implementation fg.deobf("com.simibubi.create:create-${create_minecraft_version}:${create_version}:slim") { transitive = false }
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
-    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
+  	implementation(fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false })
+    implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
+    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"))
+    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"))
+    implementation(fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}"))
   	//implementation fg.deobf("com.railwayteam.railways:Steam_Rails-forge-1.20.1:1.5.3+forge-mc1.20.1")
   	
   	//implementation fg.deobf("local:Jade:1.20.1-forge-11.4.3")

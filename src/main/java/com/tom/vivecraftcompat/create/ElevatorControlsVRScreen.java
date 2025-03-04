@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.createmod.catnip.data.Couple;
+import net.createmod.catnip.data.IntAttached;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
@@ -18,8 +20,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBehavio
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsBoard;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsFormatter;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsScreen;
-import com.simibubi.create.foundation.utility.Couple;
-import com.simibubi.create.foundation.utility.IntAttached;
 
 public class ElevatorControlsVRScreen extends ValueSettingsScreen {
 	private ElevatorFloorSelection selection;
@@ -27,7 +27,7 @@ public class ElevatorControlsVRScreen extends ValueSettingsScreen {
 	private MovementContext ctx;
 
 	public ElevatorControlsVRScreen(ElevatorContraption elevator, ElevatorFloorSelection selection, MovementContext ctx) {
-		super(null, makeBoard(elevator), new ValueSettings(elevator.namesList.size() - selection.currentIndex - 1, 0), v -> {});
+		super(null, makeBoard(elevator), new ValueSettings(elevator.namesList.size() - selection.currentIndex - 1, 0), v -> {}, 0);
 		this.selection = selection;
 		this.elevator = elevator;
 		this.ctx = ctx;
