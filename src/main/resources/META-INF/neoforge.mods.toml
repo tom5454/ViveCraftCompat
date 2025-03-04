@@ -65,5 +65,11 @@ Fix various compatibility issues with ViveCraft and various other mods.
     versionRange="*"
     ordering="NONE"
     side="BOTH"
+[[dependencies.vivecraftcompat]]
+    modId="create"
+    type="optional"
+    versionRange="[6.0.0,)"
+    ordering="NONE"
+    side="BOTH"
 [[mixins]]
 config = "vivecraftcompat.mixins.json"

@@ -14,6 +14,13 @@
 	  
 	  "compat.theoneprobe.ClientSetupMixin",
 	  
+	  "compat.create.CreateBigOutlinesMixin",
+	  "compat.create.CreateTrackBlockOutlineMixin",
+	  "compat.create.CreateControlsUtilMixin",
+	  "compat.create.CreateRaycastHelperMixin",
+	  "compat.create.CreateValueSettingsScreenMixin",
+	  "compat.create.CreateContraptionControlsMovingInteractionMixin",
+	  
 	  "MinecraftMixin",
 	  "MinecraftMixin_OverlayRender",
 	  "VRRendererMixin",
