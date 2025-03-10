@@ -1,13 +1,12 @@
 {
   "type": "neoforge",
-  "name": "vivecraftcompat-1.21",
+  "name": "vivecraftcompat-1.21.4",
   "mcVer": "1.21",
-  "verId": "1.21",
-  "display": "[NeoForge] ViveCraft Compat 1.21",
+  "verId": "1.21.4",
+  "display": "[NeoForge] ViveCraft Compat 1.21.4",
   "onGit": true,
   "subver": [
-	"1.21",
-    "1.21.1"
+	"1.21.4"
   ],
   "j17": true,
   "depProjects": [

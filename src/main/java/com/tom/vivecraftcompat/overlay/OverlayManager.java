@@ -62,7 +62,7 @@ public class OverlayManager {
 			if (layer.framebuffer == null)
 				continue;//??
 			mc.mc$setMainRenderTarget(layer.getFramebuffer());
-			layer.framebuffer.clear(Minecraft.ON_OSX);
+			layer.framebuffer.clear();
 			layer.framebuffer.bindWrite(true);
 			GuiGraphics guiGraphics = new GuiGraphics(minecraft, minecraft.renderBuffers().bufferSource());
 			RenderHelper.drawScreen(guiGraphics, partial, layer.screen, true);
@@ -147,7 +147,7 @@ public class OverlayManager {
 				if(framebuffer == null) {
 					framebuffer = new VRTextureTarget("VCC Overlay: " + screen.getClass().getName(), GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT, true, -1, true, false, false);
 				} else {
-					framebuffer.resize(GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT, Minecraft.ON_OSX);
+					framebuffer.resize(GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT);
 				}
 				int l2 = minecraft.getWindow().getGuiScaledWidth();
 				int j3 = minecraft.getWindow().getGuiScaledHeight();

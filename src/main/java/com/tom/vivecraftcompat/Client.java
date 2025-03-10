@@ -64,6 +64,5 @@ public class Client {
 	public static void registerOverlays(RegisterGuiLayersEvent event) {
 		if(ModList.get().isLoaded("jade"))JadeOverlay.register(event);
 		if(ModList.get().isLoaded("journeymap"))JourneyMapOverlay.register(event);
-		if(ModList.get().isLoaded("theoneprobe"))TOPOverlay.register(event);
 	}
 }

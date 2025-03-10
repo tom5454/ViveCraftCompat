@@ -40,7 +40,7 @@ public class HudOverlayScreen extends Screen {
 			poseStack.fill(width - 1, 0, width, height, 0xFFFF0000);
 			poseStack.fill(0, height - 1, width, height, 0xFFFF0000);
 		}
-		var dt = minecraft.getTimer();
+		var dt = minecraft.getDeltaTracker();
 		overlays.forEach(id -> {
 			NamedLayer entry = OverlayAccess.getLayerMap().get(id);
 			if(entry != null) {

@@ -11,17 +11,9 @@ import org.vivecraft.client_vr.gameplay.screenhandlers.GuiHandler;
 import org.vivecraft.client_vr.render.helpers.RenderHelper;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 
-import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat.Mode;
 
 import com.tom.cpl.gui.Frame;
 import com.tom.cpl.gui.IGui;
@@ -208,29 +200,6 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 	@Override
 	public void renderBackground(GuiGraphics p_283688_, int p_296369_, int p_296477_, float p_294317_) {}
 
-	public void drawTexture(int x, int y, int width, int height, float u1, float v1, float u2, float v2, RenderTarget framebuffer) {
-		x += getOffset().x;
-		y += getOffset().y;
-		framebuffer.bindRead();
-		RenderSystem.setShaderTexture(0, framebuffer.getColorTextureId());
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.enableBlend();
-		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE_MINUS_DST_ALPHA,
-				GlStateManager.DestFactor.ONE);
-		Tesselator tessellator = Tesselator.getInstance();
-		BufferBuilder bufferbuilder = tessellator.begin(Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-		float bo = 0;
-		org.joml.Matrix4f matrix = graphics.pose().last().pose();
-		bufferbuilder.addVertex(matrix, x, y + height, bo).setUv(u1, v2);
-		bufferbuilder.addVertex(matrix, x + width, y + height, bo).setUv(u2, v2);
-		bufferbuilder.addVertex(matrix, x + width, y, bo).setUv(u2, v1);
-		bufferbuilder.addVertex(matrix, x, y, bo).setUv(u1, v1);
-		BufferUploader.drawWithShader(bufferbuilder.build());
-		RenderSystem.disableBlend();
-	}
-
 	@Override
 	public void onClose() {
 		layer.remove();
@@ -238,7 +207,7 @@ public class FloatingGui extends GuiImpl implements VRInteractableScreen {
 
 	@Override
 	public void displayError(String e) {
-		minecraft.player.sendSystemMessage(Component.literal(e));
+		minecraft.player.displayClientMessage(Component.literal(e), false);
 		onClose();
 	}
 

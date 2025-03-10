@@ -16,10 +16,10 @@ import com.tom.vivecraftcompat.overlay.OverlayManager;
 public class MinecraftMixin_OverlayRender {
 	@Shadow
 	@Final
-	private Timer timer;
+	private Timer deltaTracker;
 
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/neoforged/neoforge/client/ClientHooks;fireRenderFramePost(Lnet/minecraft/client/DeltaTracker;)V", shift = At.Shift.AFTER), method = "runTick")
 	public void renderOverlayPasses(boolean renderLevel, CallbackInfo ci) {
-		OverlayManager.drawLayers(timer);
+		OverlayManager.drawLayers(deltaTracker);
 	}
 }
