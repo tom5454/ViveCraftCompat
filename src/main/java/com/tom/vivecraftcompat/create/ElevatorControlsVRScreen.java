@@ -55,7 +55,7 @@ public class ElevatorControlsVRScreen extends ValueSettingsScreen {
 			return;
 
 		AllPackets.getChannel().sendToServer(new ElevatorTargetFloorPacket(elevator.entity, selection.currentTargetY));
-		if (elevator.presentBlockEntities.get(ctx.localPos) instanceof ContraptionControlsBlockEntity cbe)
+		if (elevator.getBlockEntityClientSide(ctx.localPos) instanceof ContraptionControlsBlockEntity cbe)
 			cbe.pressButton();
 
 		onClose();
