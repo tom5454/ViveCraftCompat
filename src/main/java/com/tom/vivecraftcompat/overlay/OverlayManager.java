@@ -145,7 +145,10 @@ public class OverlayManager {
 		public void resize() {
 			if(VRMode.isVR()) {
 				if(framebuffer == null) {
-					framebuffer = new VRTextureTarget("VCC Overlay: " + screen.getClass().getName(), GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT, true, -1, true, false, false);
+					framebuffer = VRTextureTarget.builder("VCC Overlay: " + screen.getClass().getName()).
+							withSize(GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT).
+							withDepth().withLinearFilter().withStencil(true).
+							build();
 				} else {
 					framebuffer.resize(GuiHandler.GUI_WIDTH, GuiHandler.GUI_HEIGHT);
 				}

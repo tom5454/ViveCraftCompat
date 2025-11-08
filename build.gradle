@@ -147,10 +147,10 @@ dependencies {
   	//implementation fg.deobf('curse.maven:rubidium-574856:4684247')
   	//implementation fg.deobf('curse.maven:oculus-581495:4578741')
   	
-    compileOnly 'maven.modrinth:vivecraft:1.21.4-1.2.5-neoforge'
+    compileOnly 'maven.modrinth:vivecraft:1.21.4-1.3.4-neoforge'
     //implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4675789')
   	
-  	implementation "com.tom5454.cpm:CustomPlayerModels-1.21.4:0.6.21a"
+  	implementation "com.tom5454.cpm:CustomPlayerModels-1.21.4:0.6.24a"
   	
   	//implementation fg.deobf("local:vrapi:3.0.6-1.20.1-forge")
   	//implementation fg.deobf("local:immersivemc:1.4.0-beta1.1-1.20.1-forge")
