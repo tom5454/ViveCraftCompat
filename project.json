@@ -9,7 +9,7 @@
 	"1.21",
     "1.21.1"
   ],
-  "j17": true,
+  "j21": true,
   "depProjects": [
     {
       "slug": "vivecraft",

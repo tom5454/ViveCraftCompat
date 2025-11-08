@@ -154,10 +154,10 @@ dependencies {
   	//implementation fg.deobf('curse.maven:oculus-581495:4578741')
   	
   	compileOnly 'com.github.Virtuoel:Pehkui:3.8.3-1.21-neoforge'
-    compileOnly 'maven.modrinth:vivecraft:1.21.1-1.2.5-neoforge'
+    compileOnly 'maven.modrinth:vivecraft:1.21.1-1.3.4-neoforge'
     //implementation fg.deobf('curse.maven:iris-flywheel-compat-659897:4675789')
   	
-  	implementation "com.tom5454.cpm:CustomPlayerModels-1.21:0.6.21a"
+  	implementation "com.tom5454.cpm:CustomPlayerModels-1.21:0.6.24a"
   	implementation ("com.tom5454.toms_storage:TomsStorage-121:2.1.1") {
   		transitive = false
   	}
@@ -173,7 +173,7 @@ dependencies {
   	
   	implementation "curse.maven:the-one-probe-245211:5836106"
   	implementation "curse.maven:jade-324717:6011258"
-  	implementation 'curse.maven:journeymap-32274:5972765'
+  	implementation 'curse.maven:journeymap-32274:6689206'
   	
   	//implementation fg.deobf("dev.architectury:architectury-forge:9.1.12")
   	
