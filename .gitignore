@@ -1,0 +1,12 @@
+.gradle
+.idea
+.classpath
+.settings
+bin
+build
+codes
+.project
+*.launch
+run
+old_stuff
+runs

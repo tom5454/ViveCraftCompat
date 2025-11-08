@@ -17,13 +17,6 @@ import com.tom.vivecraftcompat.VRMode;
 @Mixin(RaycastHelper.class)
 public class CreateRaycastHelperMixin {
 
-	@Inject(at = @At("HEAD"), method = "getTraceOrigin", cancellable = true, remap = false)
-	private static void onGetTraceOrigin(Player playerIn, CallbackInfoReturnable<Vec3> cbi) {
-		if (playerIn.level().isClientSide && VRMode.isVRStanding()) {
-			cbi.setReturnValue(VRHelper.getRayOrigin());
-		}
-	}
-
 	@Inject(at = @At("HEAD"), method = "getTraceTarget", cancellable = true, remap = false)
 	private static void onGetTraceTarget(Player playerIn, double range, Vec3 origin, CallbackInfoReturnable<Vec3> cbi) {
 		if (playerIn.level().isClientSide && VRMode.isVRStanding()) {

@@ -1,0 +1,38 @@
+{
+  "type": "fabric",
+  "name": "vivecraftcompatfabric-1.20",
+  "mcVer": "1.20",
+  "verId": "1.20",
+  "display": "[Fabric] ViveCraft Compat 1.20",
+  "onGit": true,
+  "subver": [
+	"1.20.1"
+  ],
+  "j17": true,
+  "depProjects": [
+    {
+      "slug": "vivecraft",
+      "type": "requiredDependency"
+    },
+    {
+      "slug": "cloth-config",
+      "type": "requiredDependency"
+    },
+    {
+      "slug": "create",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "first-person-model",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "jade",
+      "type": "optionalDependency"
+    },
+    {
+      "slug": "toms-storage-fabric",
+      "type": "optionalDependency"
+    }
+  ]
+}

@@ -7,12 +7,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueSettingsScreen;
-import com.simibubi.create.foundation.gui.AbstractSimiScreen;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import com.tom.vivecraftcompat.VRMode;
 
@@ -39,8 +39,8 @@ public abstract class CreateValueSettingsScreenMixin extends AbstractSimiScreen 
 		return super.mouseClicked(pMouseX, pMouseY, pButton);
 	}
 
-	@Redirect(at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/utility/Lang;translateDirect(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/network/chat/MutableComponent;", remap = true), method = "renderWindow", remap = false)
+	@Redirect(at = @At(value = "INVOKE", target = "Lcom/simibubi/create/foundation/utility/CreateLang;translateDirect(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/network/chat/MutableComponent;", remap = true), method = "renderWindow", remap = false)
 	public MutableComponent replaceReleaseButtonTooltip(String oldKey, Object... oldArgs) {
-		return VRMode.isVR() ? Component.translatable("vivecraftcompat.gui.create.value_settings.click_to_confirm") : Lang.translateDirect(oldKey, oldArgs);
+		return VRMode.isVR() ? Component.translatable("vivecraftcompat.gui.create.value_settings.click_to_confirm") : CreateLang.translateDirect(oldKey, oldArgs);
 	}
 }
